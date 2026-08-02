@@ -1,0 +1,51 @@
+# --- Python / Django ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+.env
+.env.*
+!.env.example
+venv/
+.venv/
+env/
+staticfiles/
+media/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+celerybeat-schedule
+
+# --- Node / React / Vite ---
+node_modules/
+dist/
+dist-ssr/
+build/
+.vite/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Expo / React Native ---
+.expo/
+.expo-shared/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Env files (all apps) ---
+**/.env
+!**/.env.example
