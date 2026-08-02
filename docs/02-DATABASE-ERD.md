@@ -52,6 +52,7 @@ erDiagram
 
     ORGANIZATION {
         uuid id PK
+        string code UK
         string name
         string registration_number
         string email
@@ -327,6 +328,11 @@ in the brief, called out explicitly rather than silently added:
   `AuditLog`'s "a user did X" entries, matching the brief's distinct
   Super Admin permissions "View system audit logs" vs. "View security
   events".
+- **`Organization.code`** — the short login identifier (e.g. `ABC001`) used
+  in the `organization_code + email/employee_number + password` login
+  triple described throughout the brief. Distinct from
+  `registration_number` (the legal registration number) — the brief's
+  field list didn't separate these, but the login flow requires it.
 - **`Notification.category`** — an enum (`ATTENDANCE`, `LEAVE`,
   `SECURITY`, `SYSTEM`) so the three different notification audiences in
   §21 can be filtered without parsing free text.

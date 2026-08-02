@@ -38,8 +38,12 @@ All endpoints (except `/auth/login`, `/auth/refresh`, `/auth/password-reset*`,
 
 ### `POST /auth/login`
 ```json
-// Request
+// Request (Org Admin / Manager / Employee)
 { "organization_code": "ABC001", "identifier": "john@example.com", "password": "..." }
+
+// Request (Super Admin — no organization_code; resolves against
+// platform-wide accounts where organization_id IS NULL)
+{ "identifier": "owner@swams.app", "password": "..." }
 
 // Response 200
 {
@@ -49,6 +53,11 @@ All endpoints (except `/auth/login`, `/auth/refresh`, `/auth/password-reset*`,
   "user": { "id": "...", "role": "EMPLOYEE", "organization_id": "...", "employee": { ... } }
 }
 ```
+`organization_code` is optional: omitted, the login resolves only against
+platform-wide (`organization_id IS NULL`) accounts — i.e. Super Admin only.
+Provided, it resolves a tenant-scoped account within that organization.
+A request cannot match both a platform account and a tenant account, so
+this is unambiguous.
 Errors: `401 INVALID_CREDENTIALS`, `403 ACCOUNT_LOCKED`, `403
 ORGANIZATION_SUSPENDED`, `404 ORGANIZATION_NOT_FOUND`. Rate-limited
 per `(organization_code, identifier)` and per-IP.

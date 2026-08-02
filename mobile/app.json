@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "SWAMS",
+    "slug": "swams-employee",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "swams",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.swams.employee"
+    },
+    "android": {
+      "package": "app.swams.employee",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": ["CAMERA"]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "SWAMS uses your location only at the moment you check in or check out, to confirm you are at your assigned workplace."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "SWAMS uses your photo library to let you choose a profile picture.",
+          "cameraPermission": "SWAMS uses your camera to let you take a profile picture.",
+          "microphonePermission": false
+        }
+      ],
+      "expo-notifications"
+    ]
+  }
+}

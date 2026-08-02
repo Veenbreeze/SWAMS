@@ -166,7 +166,10 @@ self-service endpoints).
 - Login payload: `organization_code + identifier(email|employee_number) +
   password`. Organization code is resolved to `organization_id` first
   (also throttled/rate-limited — this triple is effectively the account
-  identifier and must be brute-force-resistant).
+  identifier and must be brute-force-resistant). `organization_code` is
+  omitted for the Super Admin Web app only, which resolves against
+  platform-wide accounts (`organization_id IS NULL`) instead — see API
+  spec §1 for the exact contract.
 - Password hashing: Django's default PBKDF2 (upgradeable to Argon2 via
   `PASSWORD_HASHERS` without data migration — Django rehashes on next
   successful login).

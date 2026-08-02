@@ -1,0 +1,17 @@
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+exclude = ["migrations", "venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Django settings split (base/local/staging/production) intentionally uses
+# `from .base import *` — the standard pattern for layering environment
+# settings — so star-import "may be undefined" warnings are expected here.
+"core/settings/*.py" = ["F403", "F405"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings.local"
+python_files = ["test_*.py", "tests.py"]
