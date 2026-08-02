@@ -7,8 +7,8 @@ from core.health import health
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/health/", health, name="health"),
-    # Domain app routes are mounted here as each is built, e.g.:
-    # path("api/v1/auth/", include("apps.authentication.interfaces.urls")),
+    path("api/v1/auth/", include("apps.authentication.urls")),
+    # Further domain app routes are mounted here as each is built.
 ]
 
 if settings.DEBUG:

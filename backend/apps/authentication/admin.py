@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from apps.authentication.models import UserAccount
+from apps.authentication.models import Device, LoginHistory, UserAccount
 
 
 @admin.register(UserAccount)
@@ -33,3 +33,23 @@ class UserAccountAdmin(UserAdmin):
             },
         ),
     )
+
+
+@admin.register(LoginHistory)
+class LoginHistoryAdmin(admin.ModelAdmin):
+    list_display = ("identifier_used", "organization", "was_successful", "ip_address", "created_at")
+    list_filter = ("was_successful", "organization")
+    search_fields = ("identifier_used", "ip_address")
+    readonly_fields = [f.name for f in LoginHistory._meta.fields]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(Device)
+class DeviceAdmin(admin.ModelAdmin):
+    list_display = ("user", "device_name", "platform", "last_seen_at")
+    search_fields = ("user__email", "device_id", "device_name")

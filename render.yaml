@@ -123,3 +123,9 @@ envVarGroups:
         value: no-reply@swams.app
       - key: SMS_API_KEY
         sync: false
+      - key: AUTH_MAX_FAILED_ATTEMPTS
+        value: "5"
+      - key: AUTH_LOCKOUT_MINUTES
+        value: "15"
+      - key: FRONTEND_PASSWORD_RESET_URL
+        sync: false

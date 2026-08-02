@@ -45,10 +45,10 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    # organizations/authentication are registered now (schema-only) because
-    # Django requires AUTH_USER_MODEL to exist before the first migration —
-    # see the models' docstrings. The rest are registered incrementally as
-    # each domain app is built (Phase 2+).
+    # organizations/authentication now carry real endpoints (Phase 2).
+    # Registered ahead of that (Phase 1, schema-only) because Django
+    # requires AUTH_USER_MODEL to exist before the first migration. The
+    # rest are registered incrementally as each domain app is built.
     "apps.organizations",
     "apps.authentication",
     # "apps.subscriptions",
@@ -74,7 +74,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "core.middleware.tenant_middleware.TenantMiddleware",  # added in Phase 3
+    "core.middleware.tenant_middleware.ResetTenantContextMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -151,10 +151,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "core.middleware.tenant_middleware.TenantAwareJWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
+        "core.permissions.security.NotBlockedByPasswordChange",
     ),
     "DEFAULT_PAGINATION_CLASS": "core.pagination.DefaultPageNumberPagination",
     "PAGE_SIZE": 25,
@@ -228,6 +229,17 @@ EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@swams.app")
 
 SMS_API_KEY = env("SMS_API_KEY", default="")
+
+# ---------------------------------------------------------------------------
+# Authentication (see apps/authentication/services.py)
+# ---------------------------------------------------------------------------
+
+AUTH_MAX_FAILED_ATTEMPTS = env.int("AUTH_MAX_FAILED_ATTEMPTS", default=5)
+AUTH_LOCKOUT_MINUTES = env.int("AUTH_LOCKOUT_MINUTES", default=15)
+# Org Admin Web's reset-password page — password reset links point here.
+FRONTEND_PASSWORD_RESET_URL = env(
+    "FRONTEND_PASSWORD_RESET_URL", default="http://localhost:5173/reset-password"
+)
 
 # ---------------------------------------------------------------------------
 # i18n

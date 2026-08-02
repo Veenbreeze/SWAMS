@@ -30,7 +30,6 @@ erDiagram
 
     USER_ACCOUNT ||--|| EMPLOYEE : "is a"
     USER_ACCOUNT ||--o{ LOGIN_HISTORY : has
-    USER_ACCOUNT ||--o{ REFRESH_TOKEN : issues
     USER_ACCOUNT ||--o{ DEVICE : registers
     USER_ACCOUNT ||--o{ AUDIT_LOG : performs
     USER_ACCOUNT ||--o{ NOTIFICATION : receives
@@ -259,16 +258,6 @@ erDiagram
         timestamptz created_at
     }
 
-    REFRESH_TOKEN {
-        uuid id PK
-        uuid user_id FK
-        string token_hash
-        string device_id
-        bool is_revoked
-        timestamptz expires_at
-        timestamptz created_at
-    }
-
     SECURITY_EVENT {
         uuid id PK
         uuid organization_id FK "nullable"
@@ -319,10 +308,17 @@ in the brief, called out explicitly rather than silently added:
   hardcoded enum) so an org admin can add org-specific leave types, and
   `LeaveBalance` gives balance-tracking a real home instead of computing
   it ad hoc from request history every time.
-- **`Device` / `LoginHistory` / `RefreshToken`** — required by §22
-  ("Device tracking", "Session management", "Logout from all devices",
-  "new device login" detection) — none of this is representable with the
-  brief's core tables alone.
+- **`Device` / `LoginHistory`** — required by §22 ("Device tracking",
+  "Session management", "new device login" detection) — none of this is
+  representable with the brief's core tables alone.
+- **No custom `RefreshToken` table** — refresh-token rotation, one-time-use
+  enforcement, and "logout from all devices" are implemented using
+  `djangorestframework-simplejwt`'s own `token_blacklist` app
+  (`OutstandingToken`/`BlacklistedToken`), not a hand-rolled table. Reusing
+  a security library's own well-tested rotation/blacklist bookkeeping
+  is safer than re-implementing the same thing in a bespoke table, and
+  `Device`/`LoginHistory` already cover the device-identification and
+  audit-trail needs the brief actually asks for.
 - **`SecurityEvent`** — separates system-detected anomalies (failed
   logins, lockouts, mock-GPS attempts, cross-tenant access attempts) from
   `AuditLog`'s "a user did X" entries, matching the brief's distinct

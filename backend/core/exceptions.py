@@ -43,14 +43,21 @@ def uniform_exception_handler(exc, context):
     if response is None:
         return None
 
-    code = getattr(exc, "default_code", None) or "ERROR"
     if isinstance(response.data, dict) and "detail" in response.data:
-        message = str(response.data["detail"])
+        detail = response.data["detail"]
+        message = str(detail)
+        # DRF's ErrorDetail carries a per-instance `.code` (e.g. a
+        # permission class raising with `code="must_change_password"`);
+        # fall back to the exception's class-level default_code, then a
+        # generic "error" — checking only default_code (as Phase 1 did)
+        # silently ignored any permission/exception that set a specific
+        # instance-level code.
+        code = getattr(detail, "code", None) or getattr(exc, "default_code", None) or "error"
         details = {}
     else:
         message = "Validation failed."
         details = response.data
-        code = "VALIDATION_ERROR"
+        code = "validation_error"
 
     response.data = {"error": {"code": str(code).upper(), "message": message, "details": details}}
     return response

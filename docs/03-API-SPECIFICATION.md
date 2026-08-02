@@ -39,7 +39,14 @@ All endpoints (except `/auth/login`, `/auth/refresh`, `/auth/password-reset*`,
 ### `POST /auth/login`
 ```json
 // Request (Org Admin / Manager / Employee)
-{ "organization_code": "ABC001", "identifier": "john@example.com", "password": "..." }
+{
+  "organization_code": "ABC001",
+  "identifier": "john@example.com",
+  "password": "...",
+  "device_id": "optional-stable-client-id",
+  "device_name": "optional, e.g. \"Pixel 8\" or \"Chrome on Windows\"",
+  "platform": "optional, e.g. \"android\" | \"ios\" | \"web\""
+}
 
 // Request (Super Admin — no organization_code; resolves against
 // platform-wide accounts where organization_id IS NULL)
@@ -58,6 +65,12 @@ platform-wide (`organization_id IS NULL`) accounts — i.e. Super Admin only.
 Provided, it resolves a tenant-scoped account within that organization.
 A request cannot match both a platform account and a tenant account, so
 this is unambiguous.
+
+`device_id`/`device_name`/`platform` are optional and used only to upsert
+a `Device` row for new-device-login detection (§22) — the mobile app
+always sends its stable Expo installation ID; web clients may omit them,
+in which case device tracking simply doesn't fire for that session.
+
 Errors: `401 INVALID_CREDENTIALS`, `403 ACCOUNT_LOCKED`, `403
 ORGANIZATION_SUSPENDED`, `404 ORGANIZATION_NOT_FOUND`. Rate-limited
 per `(organization_code, identifier)` and per-IP.

@@ -90,3 +90,59 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class LoginHistory(models.Model):
+    """One row per login attempt (success or failure) — see
+    docs/02-DATABASE-ERD.md. Powers account-lockout enforcement and gives
+    admins/users visibility into recent sign-in activity.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    organization = models.ForeignKey(
+        "organizations.Organization", on_delete=models.CASCADE, null=True, blank=True
+    )
+    user = models.ForeignKey(
+        UserAccount, on_delete=models.CASCADE, null=True, blank=True, related_name="login_history"
+    )
+    identifier_used = models.CharField(
+        max_length=255, help_text="The email/employee_number as typed, even on failure."
+    )
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    device_info = models.CharField(max_length=255, blank=True)
+    was_successful = models.BooleanField()
+    failure_reason = models.CharField(max_length=50, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["user", "-created_at"])]
+
+    def __str__(self):
+        outcome = "success" if self.was_successful else f"failed ({self.failure_reason})"
+        return f"{self.identifier_used} — {outcome}"
+
+
+class Device(models.Model):
+    """A device seen logging in as a given user — see
+    docs/02-DATABASE-ERD.md. Used to detect new-device logins.
+    `push_token` is populated once the mobile app registers for push
+    notifications (Phase 7); nullable until then.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name="devices")
+    device_id = models.CharField(max_length=255)
+    device_name = models.CharField(max_length=255, blank=True)
+    platform = models.CharField(max_length=50, blank=True)
+    push_token = models.CharField(max_length=255, null=True, blank=True)
+    first_seen_at = models.DateTimeField(auto_now_add=True)
+    last_seen_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user", "device_id"], name="unique_device_per_user"),
+        ]
+
+    def __str__(self):
+        return f"{self.device_name or self.device_id} ({self.user.email})"
