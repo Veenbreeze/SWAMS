@@ -4,6 +4,7 @@ from apps.authentication import views
 
 urlpatterns = [
     path("login", views.LoginView.as_view(), name="auth-login"),
+    path("me", views.MeView.as_view(), name="auth-me"),
     path("refresh", views.TokenRefreshView.as_view(), name="auth-refresh"),
     path("logout", views.LogoutView.as_view(), name="auth-logout"),
     path("logout-all", views.LogoutAllView.as_view(), name="auth-logout-all"),

@@ -51,15 +51,15 @@ LOCAL_APPS = [
     # rest are registered incrementally as each domain app is built.
     "apps.organizations",
     "apps.authentication",
-    # "apps.subscriptions",
-    # "apps.employees",
-    # "apps.locations",
-    # "apps.attendance",
-    # "apps.leave",
-    # "apps.notifications",
-    # "apps.reports",
-    # "apps.audit_logs",
-    # "apps.security",
+    "apps.subscriptions",
+    "apps.audit_logs",
+    "apps.locations",
+    "apps.attendance",
+    "apps.employees",
+    "apps.security",
+    "apps.notifications",
+    "apps.reports",
+    "apps.leave",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -75,6 +75,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "core.middleware.tenant_middleware.ResetTenantContextMiddleware",
+    "core.middleware.tenant_middleware.AdminSessionRlsMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -169,6 +170,14 @@ REST_FRAMEWORK = {
         "check-in": "30/min",
     },
     "EXCEPTION_HANDLER": "core.exceptions.uniform_exception_handler",
+    # This API always returns JSON — DRF's `?format=` query-param renderer
+    # override (default `URL_FORMAT_OVERRIDE = "format"`) is otherwise a
+    # silent collision waiting to happen with any endpoint that legitimately
+    # needs a `format` param of its own (e.g. Phase 6's
+    # `POST /reports/{report}/export?format=pdf|xlsx` per
+    # docs/03-API-SPECIFICATION.md §11): DRF interprets `format=pdf` as "no
+    # such renderer" and raises a bare 404 with no indication why.
+    "URL_FORMAT_OVERRIDE": None,
 }
 
 _JWT_ACCESS_MINUTES = env.int("JWT_ACCESS_TOKEN_LIFETIME_MINUTES", default=15)

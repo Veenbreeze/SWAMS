@@ -5,11 +5,25 @@ from apps.authentication.models import UserAccount
 
 class UserSummarySerializer(serializers.ModelSerializer):
     organization_id = serializers.UUIDField(read_only=True, allow_null=True)
+    employee = serializers.SerializerMethodField()
 
     class Meta:
         model = UserAccount
-        fields = ["id", "email", "employee_number", "role", "organization_id"]
+        fields = ["id", "email", "employee_number", "role", "organization_id", "employee"]
         read_only_fields = fields
+
+    def get_employee(self, user):
+        # Local import: apps.employees didn't exist when this serializer
+        # was first written (Phase 2, before Phase 4's Employee model), and
+        # apps.employees.serializers imports from apps.locations/attendance
+        # models — importing at module level here risks a circular import
+        # the moment any of those apps import something auth-adjacent.
+        from apps.employees.serializers import EmployeeSerializer
+
+        employee = getattr(user, "employee", None)
+        if employee is None:
+            return None
+        return EmployeeSerializer(employee).data
 
 
 class LoginSerializer(serializers.Serializer):

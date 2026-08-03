@@ -13,11 +13,6 @@ class OrganizationStatus(models.TextChoices):
 class Organization(models.Model):
     """Tenant root. See docs/02-DATABASE-ERD.md.
 
-    Schema-only for now: full admin lifecycle (create/suspend/activate,
-    subscription linkage) is Phase 3 work. Created ahead of schedule
-    because UserAccount (Phase 1, required for AUTH_USER_MODEL to exist
-    before the first migration) has a foreign key to it.
-
     `code` is the short login identifier (e.g. "ABC001") used in the
     organization_code + email/employee_number + password login triple —
     distinct from `registration_number`, which is the organization's legal
@@ -44,3 +39,30 @@ class Organization(models.Model):
 
     def __str__(self):
         return f"{self.code} — {self.name}"
+
+    @property
+    def current_subscription(self):
+        """Most recent subscription row by start_date — see
+        apps/subscriptions/models.py's Subscription docstring for why this
+        is a computed property rather than a stored FK.
+
+        Deliberately goes through `Subscription.objects.all_tenants()`
+        rather than the reverse accessor `self.subscriptions`: the reverse
+        related manager is dynamically generated as a *subclass* of
+        TenantManager, and `.all_tenants()`'s `super().get_queryset()`
+        walks the MRO from TenantManager upward — past `Manager`, but
+        never back down into the related manager's own
+        `.filter(organization=self)` override. So
+        `self.subscriptions.all_tenants()` silently returns every
+        Subscription row for *every* organization, not just this one.
+        Calling `.all_tenants()` on the base manager and filtering
+        explicitly avoids that trap entirely.
+        """
+        from apps.subscriptions.models import Subscription
+
+        return (
+            Subscription.objects.all_tenants()
+            .filter(organization=self)
+            .order_by("-start_date")
+            .first()
+        )

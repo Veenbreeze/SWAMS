@@ -3,7 +3,12 @@ from rest_framework.test import APIClient
 
 from apps.authentication.models import Device, LoginHistory
 from apps.organizations.models import OrganizationStatus
-from tests.factories import OrganizationFactory, SuperAdminFactory, UserAccountFactory
+from tests.factories import (
+    EmployeeFactory,
+    OrganizationFactory,
+    SuperAdminFactory,
+    UserAccountFactory,
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -29,6 +34,71 @@ def test_login_success_with_organization_code():
     assert body["must_change_password"] is False
     assert body["user"]["email"] == user.email
     assert LoginHistory.objects.filter(user=user, was_successful=True).exists()
+
+
+def test_login_response_includes_nested_employee_profile():
+    employee = EmployeeFactory()
+    user = employee.user
+    user.set_password(PASSWORD)
+    user.save(update_fields=["password"])
+
+    response = APIClient().post(
+        LOGIN_URL,
+        {
+            "organization_code": user.organization.code,
+            "identifier": user.email,
+            "password": PASSWORD,
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()["user"]["employee"]
+    assert body["id"] == str(employee.id)
+    assert body["employee_number"] == employee.employee_number
+
+
+def test_login_response_employee_is_null_for_org_admin():
+    admin = UserAccountFactory(password=PASSWORD, role="ORG_ADMIN")
+    response = APIClient().post(
+        LOGIN_URL,
+        {
+            "organization_code": admin.organization.code,
+            "identifier": admin.email,
+            "password": PASSWORD,
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["user"]["employee"] is None
+
+
+def test_me_rehydrates_the_authenticated_user():
+    employee = EmployeeFactory()
+    user = employee.user
+    user.set_password(PASSWORD)
+    user.save(update_fields=["password"])
+    login = APIClient().post(
+        LOGIN_URL,
+        {
+            "organization_code": user.organization.code,
+            "identifier": user.email,
+            "password": PASSWORD,
+        },
+    )
+    client = APIClient()
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {login.json()['access_token']}")
+
+    response = client.get("/api/v1/auth/me")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["id"] == str(user.id)
+    assert body["employee"]["id"] == str(employee.id)
+
+
+def test_me_requires_authentication():
+    response = APIClient().get("/api/v1/auth/me")
+    assert response.status_code == 401
 
 
 def test_login_success_for_super_admin_without_organization_code():

@@ -14,6 +14,10 @@ export function logout(refreshToken) {
   return apiClient.post("/auth/logout", { refresh_token: refreshToken }).then((res) => res.data);
 }
 
+export function me() {
+  return apiClient.get("/auth/me").then((res) => res.data);
+}
+
 export function changePassword({ currentPassword, newPassword }) {
   return apiClient
     .post("/auth/change-password", {

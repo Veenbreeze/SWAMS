@@ -17,8 +17,9 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework_simplejwt.tokens import RefreshToken as SimpleJWTRefreshToken
 
-from apps.authentication.models import Device, LoginHistory, UserAccount
+from apps.authentication.models import Device, LoginHistory, Role, UserAccount
 from apps.organizations.models import Organization, OrganizationStatus
+from core.db import rls
 from core.exceptions import ApiError
 
 
@@ -99,6 +100,65 @@ def _upsert_device(user, device_id, device_name, platform):
         user=user,
         device_id=device_id,
         defaults={"device_name": device_name or "", "platform": platform or ""},
+    )
+
+
+def _notify_new_device_login(*, user, device, request):
+    """New-device-login detection — see docs/03-API-SPECIFICATION.md §1
+    and docs/05-DEVELOPMENT-ROADMAP.md Phase 7 ("notification to employee
+    and Org Admin per brief §21"). Fires whenever `_upsert_device` just
+    created a `Device` row rather than updating an existing one.
+    """
+    from apps.notifications.models import NotificationCategory
+    from apps.notifications.services import NotificationDispatcher
+    from apps.security.models import SecurityEventType
+    from apps.security.services import SecurityEventLogger
+
+    device_label = device.device_name or device.platform or "a new device"
+
+    SecurityEventLogger.record(
+        event_type=SecurityEventType.NEW_DEVICE_LOGIN,
+        user=user,
+        organization=user.organization,
+        description=f"New device login: {device_label}.",
+        request=request,
+    )
+    NotificationDispatcher.notify(
+        user=user,
+        category=NotificationCategory.SECURITY,
+        title="New device signed in",
+        message=f"Your account was just signed in from {device_label}.",
+        send_email=True,
+    )
+
+    if not user.organization_id:
+        return
+    org_admins = UserAccount.objects.filter(
+        organization=user.organization, role=Role.ORG_ADMIN
+    ).exclude(pk=user.pk)
+    for org_admin in org_admins:
+        NotificationDispatcher.notify(
+            user=org_admin,
+            category=NotificationCategory.SECURITY,
+            title="New device login",
+            message=f"{user.email} signed in from {device_label}.",
+            send_email=True,
+        )
+
+
+def _notify_password_changed(user):
+    from apps.notifications.models import NotificationCategory
+    from apps.notifications.services import NotificationDispatcher
+
+    NotificationDispatcher.notify(
+        user=user,
+        category=NotificationCategory.SECURITY,
+        title="Password changed",
+        message=(
+            "Your password was just changed. If this wasn't you, "
+            "contact your administrator immediately."
+        ),
+        send_email=True,
     )
 
 
@@ -224,7 +284,16 @@ def authenticate(
         request=request,
         was_successful=True,
     )
-    _upsert_device(user, device_id, device_name, platform)
+    device, device_created = _upsert_device(user, device_id, device_name, platform)
+    if device_created:
+        _notify_new_device_login(user=user, device=device, request=request)
+
+    # Binds the same tenant context/RLS session a JWT-authenticated request
+    # would (see `TenantAwareJWTAuthentication`) — there is no JWT yet at
+    # this point for that to have done it, but the response below still
+    # needs to read this user's own tenant-scoped data (e.g. `employee`
+    # nested into `UserSummarySerializer`) in this same request.
+    rls.bind_for_user(user)
 
     access_token, refresh_token = _issue_tokens(user)
     return {
@@ -246,6 +315,7 @@ def change_password(user, current_password, new_password):
     user.set_password(new_password)
     user.must_change_password = False
     user.save(update_fields=["password", "must_change_password"])
+    _notify_password_changed(user)
 
 
 def request_password_reset(*, organization_code, identifier):
@@ -296,6 +366,7 @@ def confirm_password_reset(*, uidb64, token, new_password):
     user.save(
         update_fields=["password", "must_change_password", "failed_login_attempts", "locked_until"]
     )
+    _notify_password_changed(user)
 
 
 def revoke_all_sessions(user):

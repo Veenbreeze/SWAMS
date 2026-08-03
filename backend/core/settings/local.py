@@ -15,6 +15,12 @@ if not env.list("CORS_ALLOWED_ORIGINS", default=[]):
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+# Local dev/tests don't require a running Celery worker + Redis broker —
+# tasks (report exports) execute synchronously in-process instead. Staging/
+# production leave this at Celery's real-async default.
+CELERY_TASK_ALWAYS_EAGER = env.bool("CELERY_TASK_ALWAYS_EAGER", default=True)
+CELERY_TASK_EAGER_PROPAGATES = True
+
 INSTALLED_APPS += ["debug_toolbar"]
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 INTERNAL_IPS = ["127.0.0.1"]

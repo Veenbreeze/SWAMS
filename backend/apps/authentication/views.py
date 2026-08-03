@@ -48,6 +48,18 @@ class LoginView(APIView):
         )
 
 
+class MeView(APIView):
+    """Rehydrates `user` from a stored access token on app restart — a
+    token surviving app restart doesn't mean the session is still valid
+    server-side, so mobile calls this once at bootstrap rather than
+    trusting the token's mere presence (see mobile's
+    `AuthContext.js`).
+    """
+
+    def get(self, request):
+        return Response(UserSummarySerializer(request.user).data)
+
+
 def _user_from_undecoded_token(raw_token):
     """Decode signature + expiry only (no blacklist check) so we can tell a
     replayed-but-legitimately-issued token (reuse attack) apart from a
