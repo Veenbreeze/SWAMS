@@ -39,7 +39,30 @@
     "password": "Password",
     "submit": "Sign in",
     "submitting": "Signing in…",
-    "genericError": "Unable to sign in. Check your credentials and try again."
+    "genericError": "Unable to sign in. Check your credentials and try again.",
+    "forgotPassword": "Forgot password?"
+  },
+  "forgotPassword": {
+    "title": "Reset your password",
+    "subtitle": "Enter your organization code and email or employee ID, and we'll send a reset link if an account matches.",
+    "submit": "Send reset link",
+    "submitting": "Sending…",
+    "submittedMessage": "If an account matches, a reset link has been sent. Check your email.",
+    "backToLogin": "Back to sign in",
+    "genericError": "Unable to send a reset link right now. Please try again."
+  },
+  "resetPassword": {
+    "title": "Set a new password",
+    "subtitle": "Enter a new password for your account.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "submit": "Reset password",
+    "successMessage": "Password reset. Redirecting to sign in…",
+    "validationError": "Please enter a new password.",
+    "mismatchError": "New password and confirmation do not match.",
+    "invalidLinkError": "This reset link is invalid or missing required information.",
+    "requestNewLink": "Request a new reset link",
+    "genericError": "Unable to reset your password. The link may have expired — request a new one."
   },
   "forceChangePassword": {
     "title": "Change your password to continue",

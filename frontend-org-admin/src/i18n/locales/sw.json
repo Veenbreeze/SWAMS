@@ -39,7 +39,30 @@
     "password": "Nenosiri",
     "submit": "Ingia",
     "submitting": "Inaingia…",
-    "genericError": "Imeshindwa kuingia. Angalia taarifa zako na ujaribu tena."
+    "genericError": "Imeshindwa kuingia. Angalia taarifa zako na ujaribu tena.",
+    "forgotPassword": "Umesahau nenosiri?"
+  },
+  "forgotPassword": {
+    "title": "Weka upya nenosiri lako",
+    "subtitle": "Weka msimbo wa shirika lako na barua pepe au nambari ya mfanyakazi, tutatuma kiungo cha kuweka upya ikiwa akaunti inalingana.",
+    "submit": "Tuma kiungo cha kuweka upya",
+    "submitting": "Inatuma…",
+    "submittedMessage": "Ikiwa akaunti inalingana, kiungo cha kuweka upya kimetumwa. Angalia barua pepe yako.",
+    "backToLogin": "Rudi kuingia",
+    "genericError": "Imeshindwa kutuma kiungo cha kuweka upya sasa. Tafadhali jaribu tena."
+  },
+  "resetPassword": {
+    "title": "Weka nenosiri jipya",
+    "subtitle": "Weka nenosiri jipya kwa akaunti yako.",
+    "newPassword": "Nenosiri jipya",
+    "confirmPassword": "Thibitisha nenosiri jipya",
+    "submit": "Weka upya nenosiri",
+    "successMessage": "Nenosiri limewekwa upya. Inaelekeza kwenye kuingia…",
+    "validationError": "Tafadhali weka nenosiri jipya.",
+    "mismatchError": "Nenosiri jipya na uthibitisho havifanani.",
+    "invalidLinkError": "Kiungo hiki cha kuweka upya si sahihi au kinakosa taarifa muhimu.",
+    "requestNewLink": "Omba kiungo kipya cha kuweka upya",
+    "genericError": "Imeshindwa kuweka upya nenosiri lako. Kiungo kinaweza kuwa kimeisha muda — omba kipya."
   },
   "forceChangePassword": {
     "title": "Badilisha nenosiri lako ili kuendelea",

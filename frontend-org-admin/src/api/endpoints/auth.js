@@ -23,6 +23,25 @@ export function changePassword({ currentPassword, newPassword }) {
     .then((res) => res.data);
 }
 
+export function requestPasswordReset({ organizationCode, identifier }) {
+  return apiClient
+    .post("/auth/password-reset/request", {
+      organization_code: organizationCode,
+      identifier,
+    })
+    .then((res) => res.data);
+}
+
+export function confirmPasswordReset({ uid, token, newPassword }) {
+  return apiClient
+    .post("/auth/password-reset/confirm", {
+      uid,
+      token,
+      new_password: newPassword,
+    })
+    .then((res) => res.data);
+}
+
 export function requestProfilePictureUpload({ contentType, fileSize }) {
   return apiClient
     .post("/auth/me/profile-picture", { content_type: contentType, file_size: fileSize })

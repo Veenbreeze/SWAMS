@@ -4,6 +4,8 @@ import AuthLayout from "@/layouts/AuthLayout";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import Login from "@/pages/auth/Login";
 import ForceChangePassword from "@/pages/auth/ForceChangePassword";
+import ForgotPassword from "@/pages/auth/ForgotPassword";
+import ResetPassword from "@/pages/auth/ResetPassword";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import EmployeeList from "@/pages/employees/EmployeeList";
 import DepartmentList from "@/pages/departments/DepartmentList";
@@ -21,6 +23,8 @@ export const router = createBrowserRouter([
     children: [
       { path: "/login", element: <Login /> },
       { path: "/force-change-password", element: <ForceChangePassword /> },
+      { path: "/forgot-password", element: <ForgotPassword /> },
+      { path: "/reset-password", element: <ResetPassword /> },
     ],
   },
   {

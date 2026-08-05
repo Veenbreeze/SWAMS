@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -76,6 +76,12 @@ export default function Login() {
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? t("login.submitting") : t("login.submit")}
           </Button>
+          <Link
+            to="/forgot-password"
+            className="text-center text-sm text-primary underline underline-offset-4"
+          >
+            {t("login.forgotPassword")}
+          </Link>
         </form>
       </CardContent>
     </Card>
