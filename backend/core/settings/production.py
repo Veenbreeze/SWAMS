@@ -20,3 +20,13 @@ SECURE_HSTS_PRELOAD = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # Render terminates TLS at the edge
+
+# Defaults to real async dispatch (a separate `swams-worker`/`swams-beat`
+# process consuming from REDIS_URL, per render.yaml). Only set
+# CELERY_TASK_ALWAYS_EAGER=True here for a workerless deployment (e.g. a
+# free-tier Render account with no paid background-worker service) — tasks
+# then run synchronously in the web process itself, and scheduled/periodic
+# tasks (subscription-expiry checks, report pre-generation) simply never
+# fire, since there is no Beat process to trigger them regardless of this
+# flag. Unset it once real worker/beat services exist.
+CELERY_TASK_ALWAYS_EAGER = env.bool("CELERY_TASK_ALWAYS_EAGER", default=False)
