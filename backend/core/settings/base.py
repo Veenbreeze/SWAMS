@@ -256,6 +256,14 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@swams.app")
 
+# Set EMAIL_BACKEND to "core.mail.resend_backend.ResendEmailBackend" (instead
+# of Django's smtp backend) on hosts that block outbound SMTP ports — e.g.
+# Render's free web services, since September 2025. Until RESEND_API_KEY's
+# account has a verified sending domain, Resend only delivers to the
+# account owner's own address, not arbitrary recipients — fine for
+# confirming the integration works, not yet real multi-user production email.
+RESEND_API_KEY = env("RESEND_API_KEY", default="")
+
 SMS_API_KEY = env("SMS_API_KEY", default="")
 
 # ---------------------------------------------------------------------------
