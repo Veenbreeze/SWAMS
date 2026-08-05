@@ -39,6 +39,11 @@ def _request_signed_upload_url(*, bucket, path):
         method="POST",
         headers={
             "Authorization": f"Bearer {settings.SUPABASE_SERVICE_KEY}",
+            # Required alongside Authorization — Supabase's gateway uses this
+            # to identify the calling project/key; without it, a `sb_secret_…`
+            # key in Authorization alone gets misread as a JWT and rejected
+            # with "Invalid Compact JWS" rather than a clean 401/403.
+            "apikey": settings.SUPABASE_SERVICE_KEY,
             "Content-Type": "application/json",
         },
         data=b"{}",
@@ -85,6 +90,7 @@ def upload_object(*, bucket, path, content, content_type):
         method="POST",
         headers={
             "Authorization": f"Bearer {settings.SUPABASE_SERVICE_KEY}",
+            "apikey": settings.SUPABASE_SERVICE_KEY,
             "Content-Type": content_type,
             "x-upsert": "true",
         },
@@ -112,6 +118,7 @@ def create_signed_download_url(*, bucket, path, expires_in=3600):
         method="POST",
         headers={
             "Authorization": f"Bearer {settings.SUPABASE_SERVICE_KEY}",
+            "apikey": settings.SUPABASE_SERVICE_KEY,
             "Content-Type": "application/json",
         },
         data=json.dumps({"expiresIn": expires_in}).encode(),
