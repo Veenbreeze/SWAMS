@@ -9,7 +9,15 @@ class UserSummarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserAccount
-        fields = ["id", "email", "employee_number", "role", "organization_id", "employee"]
+        fields = [
+            "id",
+            "email",
+            "employee_number",
+            "role",
+            "organization_id",
+            "profile_picture_url",
+            "employee",
+        ]
         read_only_fields = fields
 
     def get_employee(self, user):
@@ -53,3 +61,13 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
 class LogoutSerializer(serializers.Serializer):
     refresh_token = serializers.CharField()
+
+
+class ProfilePictureRequestSerializer(serializers.Serializer):
+    content_type = serializers.ChoiceField(choices=["image/jpeg", "image/png", "image/webp"])
+    file_size = serializers.IntegerField(min_value=1, max_value=5 * 1024 * 1024)
+
+
+class ProfilePictureResponseSerializer(serializers.Serializer):
+    upload_url = serializers.CharField()
+    profile_picture_url = serializers.CharField()

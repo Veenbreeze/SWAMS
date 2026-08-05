@@ -53,6 +53,11 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 class EmployeeCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(write_only=True)
+    # The Org Admin chooses this employee's initial password directly
+    # (rather than the system generating one) — strength is re-checked in
+    # the service layer (core.validation); min_length here is just a
+    # cheap, immediate shape check.
+    password = serializers.CharField(write_only=True, min_length=10)
     role = serializers.ChoiceField(
         choices=_ASSIGNABLE_ROLES, default=Role.EMPLOYEE, write_only=True
     )
@@ -77,6 +82,7 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
         model = Employee
         fields = [
             "email",
+            "password",
             "role",
             "employee_number",
             "first_name",
@@ -134,7 +140,6 @@ class EmployeeSelfUpdateSerializer(serializers.ModelSerializer):
 
 class EmployeeCreateResponseSerializer(serializers.Serializer):
     employee = EmployeeSerializer()
-    temporary_password = serializers.CharField()
 
 
 class ManagerAssignmentSerializer(serializers.ModelSerializer):

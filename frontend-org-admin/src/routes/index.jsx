@@ -12,6 +12,7 @@ import AttendanceList from "@/pages/attendance/AttendanceList";
 import Reports from "@/pages/reports/Reports";
 import LeaveList from "@/pages/leaves/LeaveList";
 import Notifications from "@/pages/notifications/Notifications";
+import Recommendations from "@/pages/recommendations/Recommendations";
 import Settings from "@/pages/settings/Settings";
 
 export const router = createBrowserRouter([
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
           { path: "/reports", element: <Reports /> },
           { path: "/leaves", element: <LeaveList /> },
           { path: "/notifications", element: <Notifications /> },
+          { path: "/recommendations", element: <Recommendations /> },
           { path: "/settings", element: <Settings /> },
         ],
       },

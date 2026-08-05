@@ -4,6 +4,7 @@ from apps.leave import views
 
 urlpatterns = [
     path("leave/types", views.LeaveTypeListView.as_view(), name="leave-types"),
+    path("leave/types/<uuid:pk>", views.LeaveTypeDetailView.as_view(), name="leave-type-detail"),
     path("leave/requests", views.LeaveRequestListCreateView.as_view(), name="leave-requests"),
     path(
         "leave/requests/<uuid:pk>",

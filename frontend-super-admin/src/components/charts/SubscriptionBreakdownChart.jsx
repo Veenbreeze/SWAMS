@@ -1,4 +1,5 @@
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useTranslation } from "react-i18next";
 
 // Subscription status genuinely is a status (not an arbitrary category),
 // so it draws from the reserved status palette — see dataviz skill's
@@ -12,17 +13,14 @@ const STATUS_COLOR = {
   NONE: "var(--color-muted-foreground)",
 };
 
-const STATUS_LABEL = {
-  ACTIVE: "Active",
-  TRIAL: "Trial",
-  EXPIRED: "Expired",
-  CANCELLED: "Cancelled",
-  NONE: "No subscription",
-};
-
 export function SubscriptionBreakdownChart({ breakdown }) {
+  const { t } = useTranslation();
   const data = Object.entries(breakdown)
-    .map(([status, count]) => ({ status, label: STATUS_LABEL[status] ?? status, count }))
+    .map(([status, count]) => ({
+      status,
+      label: t(`subscriptionStatusLabel.${status}`, { defaultValue: status }),
+      count,
+    }))
     .sort((a, b) => b.count - a.count);
 
   return (

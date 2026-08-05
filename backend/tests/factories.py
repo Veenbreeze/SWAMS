@@ -8,6 +8,7 @@ from apps.employees.models import Department, Employee, ManagerAssignment
 from apps.leave.models import LeaveRequest, LeaveType
 from apps.locations.models import Branch
 from apps.organizations.models import Organization, OrganizationStatus
+from apps.subscriptions.models import Subscription, SubscriptionPlan
 
 
 class OrganizationFactory(factory.django.DjangoModelFactory):
@@ -141,3 +142,27 @@ class LeaveRequestFactory(factory.django.DjangoModelFactory):
     start_date = factory.LazyFunction(datetime.date.today)
     end_date = factory.LazyFunction(datetime.date.today)
     reason = "Personal"
+
+
+class SubscriptionPlanFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = SubscriptionPlan
+
+    code = factory.Sequence(lambda n: f"PLAN{n:04d}")
+    name = factory.Sequence(lambda n: f"Plan {n}")
+    max_employees = 50
+    max_branches = 5
+    monthly_price = "100.00"
+    grace_period_days = 7
+
+
+class SubscriptionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Subscription
+
+    organization = factory.SubFactory(OrganizationFactory)
+    plan = factory.SubFactory(SubscriptionPlanFactory)
+    start_date = factory.LazyFunction(datetime.date.today)
+    expiry_date = factory.LazyFunction(
+        lambda: datetime.date.today() + datetime.timedelta(days=30)
+    )

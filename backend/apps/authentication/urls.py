@@ -10,6 +10,11 @@ urlpatterns = [
     path("logout-all", views.LogoutAllView.as_view(), name="auth-logout-all"),
     path("change-password", views.ChangePasswordView.as_view(), name="auth-change-password"),
     path(
+        "me/profile-picture",
+        views.MyProfilePictureView.as_view(),
+        name="auth-me-profile-picture",
+    ),
+    path(
         "password-reset/request",
         views.PasswordResetRequestView.as_view(),
         name="auth-password-reset-request",

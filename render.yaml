@@ -113,6 +113,13 @@ envVarGroups:
         value: org-logos
       - key: SUPABASE_BUCKET_DOCUMENTS
         value: documents
+      - key: EMAIL_BACKEND
+        # base.py defaults this to the console backend (prints emails to
+        # the process log instead of sending them) — that default is fine
+        # for local dev but must be overridden here, or password-reset and
+        # notification emails silently no-op forever in production even
+        # with EMAIL_HOST/USER/PASSWORD correctly filled in below.
+        value: django.core.mail.backends.smtp.EmailBackend
       - key: EMAIL_HOST
         sync: false
       - key: EMAIL_HOST_USER

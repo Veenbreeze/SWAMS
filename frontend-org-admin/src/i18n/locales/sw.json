@@ -1,0 +1,333 @@
+{
+  "common": {
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "cancel": "Ghairi",
+    "edit": "Hariri",
+    "delete": "Futa",
+    "loading": "Inapakia…",
+    "genericError": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "logOut": "Toka",
+    "close": "Funga"
+  },
+  "nav": {
+    "dashboard": "Dashibodi",
+    "employees": "Wafanyakazi",
+    "departments": "Idara",
+    "branches": "Matawi",
+    "attendance": "Mahudhurio",
+    "reports": "Ripoti",
+    "leaves": "Likizo",
+    "notifications": "Arifa",
+    "recommendations": "Mapendekezo",
+    "settings": "Mipangilio"
+  },
+  "pageStub": {
+    "comingSoon": "Ukurasa huu utatengenezwa katika awamu ijayo ya maendeleo."
+  },
+  "attendanceStatus": {
+    "PRESENT": "Waliohudhuria",
+    "LATE": "Waliochelewa",
+    "EARLY_DEPARTURE": "Kuondoka Mapema",
+    "OVERTIME": "Muda wa Ziada",
+    "ABSENT": "Wasiohudhuria"
+  },
+  "login": {
+    "title": "Ingia SWAMS",
+    "organizationCode": "Msimbo wa shirika",
+    "identifier": "Barua pepe au nambari ya mfanyakazi",
+    "password": "Nenosiri",
+    "submit": "Ingia",
+    "submitting": "Inaingia…",
+    "genericError": "Imeshindwa kuingia. Angalia taarifa zako na ujaribu tena."
+  },
+  "forceChangePassword": {
+    "title": "Badilisha nenosiri lako ili kuendelea",
+    "subtitle": "Akaunti yako ina nenosiri la muda. Weka jipya ili kuendelea.",
+    "currentPassword": "Nenosiri la sasa (la muda)",
+    "newPassword": "Nenosiri jipya",
+    "confirmPassword": "Thibitisha nenosiri jipya",
+    "submit": "Badilisha nenosiri",
+    "validationError": "Tafadhali jaza sehemu zote mbili za nenosiri.",
+    "mismatchError": "Nenosiri jipya na uthibitisho havifanani.",
+    "genericError": "Imeshindwa kubadilisha nenosiri lako. Angalia nenosiri lako la sasa na ujaribu tena."
+  },
+  "profileDialog": {
+    "title": "Wasifu wako",
+    "changePicture": "Badilisha picha",
+    "uploading": "Inapakia…",
+    "pictureError": "Imeshindwa kupakia picha hii. Tafadhali jaribu tena.",
+    "passwordSectionTitle": "Badilisha nenosiri",
+    "currentPasswordLabel": "Nenosiri la sasa",
+    "newPasswordLabel": "Nenosiri jipya",
+    "changePassword": "Badilisha nenosiri",
+    "changingPassword": "Inabadilisha…",
+    "passwordSuccess": "Nenosiri limebadilishwa.",
+    "passwordError": "Imeshindwa kubadilisha nenosiri lako. Angalia nenosiri lako la sasa na ujaribu tena."
+  },
+  "dashboard": {
+    "title": "Dashibodi",
+    "loading": "Inapakia dashibodi…",
+    "error": "Imeshindwa kupakia dashibodi.",
+    "present": "Waliohudhuria",
+    "late": "Waliochelewa",
+    "absent": "Wasiohudhuria",
+    "onLeave": "Kwenye Likizo",
+    "last7Days": "Siku 7 zilizopita"
+  },
+  "attendanceChart": {
+    "present": "Waliohudhuria",
+    "late": "Waliochelewa",
+    "absent": "Wasiohudhuria"
+  },
+  "reports": {
+    "title": "Ripoti",
+    "loading": "Inapakia ripoti…",
+    "error": "Imeshindwa kupakia ripoti.",
+    "present": "Waliohudhuria",
+    "late": "Waliochelewa",
+    "earlyDeparture": "Kuondoka Mapema",
+    "overtime": "Muda wa Ziada",
+    "dailyAttendance": "Mahudhurio ya kila siku",
+    "exportPdf": "Pakua PDF",
+    "exportXlsx": "Pakua Excel",
+    "preparing": "Inaandaa…",
+    "download": "Pakua",
+    "exportFailed": "Upakuaji umeshindwa.",
+    "exportFailedWithReason": "Upakuaji umeshindwa: {{reason}}"
+  },
+  "leaves": {
+    "title": "Likizo",
+    "loading": "Inapakia maombi ya likizo…",
+    "error": "Imeshindwa kupakia maombi ya likizo.",
+    "noResults": "Hakuna maombi ya likizo yaliyopatikana.",
+    "filters": {
+      "all": "Zote",
+      "pending": "Zinasubiri",
+      "approved": "Zimeidhinishwa",
+      "rejected": "Zimekataliwa",
+      "cancelled": "Zimeghairiwa"
+    },
+    "table": {
+      "employee": "Mfanyakazi",
+      "leaveType": "Aina ya likizo",
+      "dates": "Tarehe",
+      "days": "Siku",
+      "status": "Hali",
+      "actions": "Vitendo"
+    },
+    "approve": "Idhinisha",
+    "reject": "Kataa",
+    "balance": "Salio",
+    "rejectDialog": {
+      "title": "Kataa ombi la likizo",
+      "description": "{{employeeName}} — {{leaveTypeName}}. Sababu inahitajika.",
+      "reasonLabel": "Sababu",
+      "submit": "Kataa ombi",
+      "submitting": "Inakataa…",
+      "genericError": "Imeshindwa kukataa ombi hili."
+    },
+    "balanceDialog": {
+      "title": "Salio la likizo",
+      "loading": "Inapakia salio…",
+      "error": "Imeshindwa kupakia salio la likizo.",
+      "noResults": "Hakuna rekodi za salio bado.",
+      "daysLeft": "Siku {{remaining}} / {{allocated}} zimebaki"
+    },
+    "manageTypes": "Simamia aina za likizo",
+    "manageTypesDialog": {
+      "title": "Aina za likizo",
+      "description": "Wafanyakazi huchagua kati ya haya wanapowasilisha ombi la likizo.",
+      "loading": "Inapakia aina za likizo…",
+      "error": "Imeshindwa kupakia aina za likizo.",
+      "noResults": "Hakuna aina za likizo bado.",
+      "daysPerYear": "Siku {{days}} / mwaka",
+      "add": "Ongeza aina ya likizo",
+      "editTitle": "Hariri aina ya likizo",
+      "newTitle": "Aina mpya ya likizo",
+      "nameLabel": "Jina",
+      "daysLabel": "Siku za kawaida kwa mwaka",
+      "requiresApprovalLabel": "Inahitaji idhini",
+      "saveError": "Imeshindwa kuhifadhi aina hii ya likizo."
+    }
+  },
+  "departments": {
+    "new": "Idara mpya",
+    "loading": "Inapakia idara…",
+    "error": "Imeshindwa kupakia idara.",
+    "noResults": "Hakuna idara bado.",
+    "table": {
+      "name": "Jina",
+      "parent": "Idara mzazi",
+      "actions": "Vitendo"
+    },
+    "confirmDeleteTitle": "Futa idara?",
+    "confirmDelete": "Futa idara \"{{name}}\"? Hii inafanya kazi tu ikiwa haina wafanyakazi wanaotumika.",
+    "deleteError": "Imeshindwa kufuta idara hii.",
+    "editTitle": "Hariri idara",
+    "newTitle": "Idara mpya",
+    "dialogDescription": "Idara zinaweza kuwekwa chini ya idara mzazi (hiari).",
+    "noParent": "Hakuna mzazi",
+    "saveError": "Imeshindwa kuhifadhi idara hii."
+  },
+  "branches": {
+    "new": "Tawi jipya",
+    "loading": "Inapakia matawi…",
+    "error": "Imeshindwa kupakia matawi.",
+    "noResults": "Hakuna matawi bado.",
+    "table": {
+      "name": "Jina",
+      "address": "Anwani",
+      "radius": "Kipenyo cha eneo",
+      "status": "Hali",
+      "actions": "Vitendo"
+    },
+    "metersValue": "mita {{value}}",
+    "active": "Linatumika",
+    "inactive": "Halitumiki",
+    "editTitle": "Hariri tawi",
+    "newTitle": "Tawi jipya",
+    "editDescription": "Kipenyo na kikomo cha usahihi vinadhibiti eneo ambalo wafanyakazi wanapaswa kuingia kazini kutoka.",
+    "newDescription": "Nasa mahali halisi pa tawi kabla ya kuhifadhi — kuratibu ni uthibitisho wa GPS, si maandishi huru.",
+    "radiusLabel": "Kipenyo cha eneo (mita)",
+    "accuracyLabel": "Kikomo cha juu cha usahihi wa GPS (mita)",
+    "currentLocation": "Mahali: {{lat}}, {{lng}}",
+    "noLocationYet": "Bado hakuna mahali palipoandikwa.",
+    "locating": "Inatafuta mahali…",
+    "captureLocation": "Nasa mahali pa sasa",
+    "updateLocation": "Sasisha mahali",
+    "locationError": "Imeshindwa kusoma mahali pako. Angalia ruhusa za mahali kwenye kivinjari.",
+    "poorAccuracyError": "Usomaji huu wa mahali una usahihi wa mita {{meters}} tu — si sahihi vya kutosha kuweka sehemu ya kuingilia ya tawi (upeo ni mita 50). Jaribu tena nje ya jengo, ikiwezekana kwa simu yenye GPS badala ya kompyuta.",
+    "saveError": "Imeshindwa kuhifadhi tawi hili.",
+    "confirmDeleteTitle": "Futa tawi?",
+    "confirmDelete": "Futa tawi \"{{name}}\"? Wafanyakazi waliopangiwa tawi hili wataondolewa.",
+    "deleteError": "Imeshindwa kufuta tawi hili."
+  },
+  "employees": {
+    "new": "Mfanyakazi mpya",
+    "loading": "Inapakia wafanyakazi…",
+    "error": "Imeshindwa kupakia wafanyakazi.",
+    "noResults": "Hakuna wafanyakazi bado.",
+    "table": {
+      "name": "Jina",
+      "number": "Namba ya mfanyakazi",
+      "email": "Barua pepe",
+      "role": "Wadhifa",
+      "department": "Idara",
+      "status": "Hali",
+      "actions": "Vitendo"
+    },
+    "resetPassword": "Weka upya nenosiri",
+    "confirmResetPasswordTitle": "Weka upya nenosiri?",
+    "confirmResetPassword": "Tengeneza nenosiri jipya la muda kwa mfanyakazi huyu? Nenosiri lake la sasa litaacha kufanya kazi.",
+    "terminate": "Achisha kazi",
+    "confirmTerminateTitle": "Achisha kazi mfanyakazi?",
+    "confirmTerminate": "Achisha kazi {{name}}? Hii haiwezi kutenduliwa kutoka skrini hii.",
+    "editTitle": "Hariri mfanyakazi",
+    "newTitle": "Mfanyakazi mpya",
+    "editDescription": "Sasisha taarifa za mfanyakazi huyu.",
+    "newDescription": "Inaunda akaunti ya kuingia na nenosiri unaloweka hapa chini.",
+    "roleEmployee": "Mfanyakazi",
+    "roleManager": "Meneja",
+    "passwordLabel": "Nenosiri",
+    "passwordHint": "Mfanyakazi atatakiwa kubadilisha hili mara ya kwanza ataposaini kuingia.",
+    "numberLabel": "Namba ya mfanyakazi",
+    "firstNameLabel": "Jina la kwanza",
+    "lastNameLabel": "Jina la mwisho",
+    "phoneLabel": "Simu",
+    "positionLabel": "Wadhifa",
+    "joiningDateLabel": "Tarehe ya kujiunga",
+    "shiftLabel": "Zamu",
+    "noneOption": "Hakuna",
+    "saveError": "Imeshindwa kuhifadhi mfanyakazi huyu.",
+    "terminateError": "Imeshindwa kusitisha mfanyakazi huyu.",
+    "resetPasswordError": "Imeshindwa kuweka upya nenosiri la mfanyakazi huyu.",
+    "temporaryPasswordTitle": "Nenosiri la muda",
+    "temporaryPasswordDescription": "Nakili sasa na umpe mfanyakazi nje ya mfumo — halitaonyeshwa tena.",
+    "done": "Imekamilika"
+  },
+  "attendance": {
+    "loading": "Inapakia rekodi za mahudhurio…",
+    "error": "Imeshindwa kupakia rekodi za mahudhurio.",
+    "noResults": "Hakuna rekodi za mahudhurio zinazolingana na vichujio hivi.",
+    "filters": {
+      "date": "Tarehe",
+      "status": "Hali",
+      "allStatuses": "Hali zote",
+      "allBranches": "Matawi yote",
+      "allDepartments": "Idara zote"
+    },
+    "table": {
+      "employee": "Mfanyakazi",
+      "branch": "Tawi",
+      "date": "Tarehe",
+      "checkIn": "Kuingia",
+      "checkOut": "Kutoka",
+      "status": "Hali"
+    }
+  },
+  "settings": {
+    "title": "Mipangilio",
+    "shiftsHeading": "Zamu",
+    "newShift": "Zamu mpya",
+    "loadingShifts": "Inapakia zamu…",
+    "errorShifts": "Imeshindwa kupakia zamu.",
+    "noShifts": "Hakuna zamu zilizowekwa bado.",
+    "shiftTable": {
+      "name": "Jina",
+      "start": "Muda wa kuanza",
+      "end": "Muda wa mwisho",
+      "crossesMidnight": "Inavuka usiku wa manane",
+      "actions": "Vitendo"
+    },
+    "shiftDialog": {
+      "editTitle": "Hariri zamu",
+      "newTitle": "Zamu mpya",
+      "nameLabel": "Jina",
+      "startLabel": "Muda wa kuanza",
+      "endLabel": "Muda wa mwisho",
+      "crossesMidnightLabel": "Zamu inavuka usiku wa manane (mfano: zamu ya usiku)",
+      "saveError": "Imeshindwa kuhifadhi zamu hii."
+    },
+    "confirmDeleteShiftTitle": "Futa zamu?",
+    "confirmDeleteShift": "Futa zamu \"{{name}}\"?",
+    "deleteShiftError": "Imeshindwa kufuta zamu hii.",
+    "ruleHeading": "Kanuni ya mahudhurio",
+    "ruleDescription": "Inadhibiti jinsi kuingia kazini kunavyoainishwa katika shirika lote.",
+    "loadingRule": "Inapakia kanuni ya mahudhurio…",
+    "errorRule": "Imeshindwa kupakia kanuni ya mahudhurio.",
+    "workingDaysLabel": "Siku za kazi",
+    "lateThresholdLabel": "Kikomo cha kuchelewa (dakika)",
+    "earlyDepartureThresholdLabel": "Kikomo cha kuondoka mapema (dakika)",
+    "overtimeThresholdLabel": "Kikomo cha muda wa ziada (dakika)",
+    "ruleSaveError": "Imeshindwa kuhifadhi kanuni ya mahudhurio.",
+    "ruleSaved": "Imehifadhiwa.",
+    "days": {
+      "0": "Jumatatu",
+      "1": "Jumanne",
+      "2": "Jumatano",
+      "3": "Alhamisi",
+      "4": "Ijumaa",
+      "5": "Jumamosi",
+      "6": "Jumapili"
+    }
+  },
+  "notifications": {
+    "loading": "Inapakia arifa…",
+    "error": "Imeshindwa kupakia arifa.",
+    "noResults": "Hakuna arifa bado.",
+    "markAllRead": "Weka zote kama zimesomwa",
+    "markRead": "Weka kama imesomwa",
+    "new": "Mpya",
+    "filters": {
+      "all": "Zote",
+      "unread": "Hazijasomwa",
+      "read": "Zimesomwa"
+    }
+  },
+  "recommendations": {
+    "loading": "Inapakia mapendekezo…",
+    "error": "Imeshindwa kupakia mapendekezo.",
+    "noResults": "Hakuna mapendekezo bado."
+  }
+}

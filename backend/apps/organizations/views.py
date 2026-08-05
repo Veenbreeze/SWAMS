@@ -34,17 +34,18 @@ class OrganizationListCreateView(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         data = dict(serializer.validated_data)
         admin_email = data.pop("admin_email")
+        admin_password = data.pop("admin_password")
 
-        organization, admin, temporary_password = services.create_organization(
-            data=data, admin_email=admin_email, actor=request.user, request=request
+        organization, admin = services.create_organization(
+            data=data,
+            admin_email=admin_email,
+            admin_password=admin_password,
+            actor=request.user,
+            request=request,
         )
 
         response = OrganizationCreateResponseSerializer(
-            {
-                "organization": organization,
-                "admin": admin,
-                "temporary_password": temporary_password,
-            }
+            {"organization": organization, "admin": admin}
         )
         return Response(response.data, status=201)
 

@@ -1,5 +1,17 @@
 import apiClient from "@/api/client";
 
+export function getLeaveTypes(params) {
+  return apiClient.get("/leave/types", { params }).then((res) => res.data);
+}
+
+export function createLeaveType(data) {
+  return apiClient.post("/leave/types", data).then((res) => res.data);
+}
+
+export function updateLeaveType(id, data) {
+  return apiClient.patch(`/leave/types/${id}`, data).then((res) => res.data);
+}
+
 export function getLeaveRequests(params) {
   return apiClient.get("/leave/requests", { params }).then((res) => res.data);
 }

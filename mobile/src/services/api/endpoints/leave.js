@@ -4,8 +4,8 @@ export function getLeaveTypes() {
   return apiClient.get("/leave/types").then((res) => res.data.results ?? res.data);
 }
 
-export function getLeaveRequests() {
-  return apiClient.get("/leave/requests").then((res) => res.data);
+export function getLeaveRequests(params) {
+  return apiClient.get("/leave/requests", { params }).then((res) => res.data);
 }
 
 export function submitLeaveRequest({ leaveTypeId, startDate, endDate, reason }) {

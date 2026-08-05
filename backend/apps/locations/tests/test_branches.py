@@ -50,6 +50,31 @@ def test_org_admin_can_create_branch_with_gps_accuracy():
     assert body["radius_meters"] == 150
 
 
+def test_creating_branch_with_imprecise_gps_accuracy_is_rejected():
+    # A desktop browser with no GPS chip falls back to WiFi/IP-based
+    # positioning, which can report hundreds of meters of accuracy — that
+    # can't be allowed to become a branch's permanent check-in center, or
+    # no employee's real phone GPS could ever satisfy the geofence.
+    admin = _org_admin()
+    client = _client_as(admin)
+
+    response = client.post(
+        "/api/v1/branches",
+        {
+            "name": "Head Office",
+            "address": "1 Example Street",
+            "latitude": -6.792354,
+            "longitude": 39.208328,
+            "radius_meters": 150,
+            "gps_accuracy_limit_meters": 40,
+            "gps_accuracy": 500,
+        },
+    )
+
+    assert response.status_code == 400
+    assert "gps_accuracy" in response.json()["error"]["details"]
+
+
 def test_creating_branch_without_gps_accuracy_is_rejected():
     admin = _org_admin()
     client = _client_as(admin)

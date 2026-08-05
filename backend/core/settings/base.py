@@ -11,6 +11,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import environ
+from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -53,6 +54,7 @@ LOCAL_APPS = [
     "apps.authentication",
     "apps.subscriptions",
     "apps.audit_logs",
+    "apps.platform_settings",
     "apps.locations",
     "apps.attendance",
     "apps.employees",
@@ -60,6 +62,7 @@ LOCAL_APPS = [
     "apps.notifications",
     "apps.reports",
     "apps.leave",
+    "apps.feedback",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -213,6 +216,17 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
 
+CELERY_BEAT_SCHEDULE = {
+    # Daily subscription expiry sweep — see apps/subscriptions/tasks.py and
+    # docs/05-DEVELOPMENT-ROADMAP.md Phase 8. Requires `celery beat` running
+    # alongside the worker in staging/production; local/test settings run
+    # tasks eagerly and never consult this schedule.
+    "check-subscription-expiries": {
+        "task": "apps.subscriptions.tasks.check_subscription_expiries",
+        "schedule": crontab(hour=1, minute=0),
+    },
+}
+
 # ---------------------------------------------------------------------------
 # Supabase (Postgres connection above; Storage client for file uploads)
 # ---------------------------------------------------------------------------
@@ -224,6 +238,11 @@ SUPABASE_STORAGE_BUCKET_PROFILE_PICTURES = env(
 )
 SUPABASE_STORAGE_BUCKET_ORG_LOGOS = env("SUPABASE_BUCKET_ORG_LOGOS", default="org-logos")
 SUPABASE_STORAGE_BUCKET_DOCUMENTS = env("SUPABASE_BUCKET_DOCUMENTS", default="documents")
+
+# Backs storage.local_dev's fallback upload path, used only when Supabase
+# isn't configured and DEBUG is True — see storage/local_dev.py.
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
 
 # ---------------------------------------------------------------------------
 # Email / SMS (see notifications app, Phase 7)

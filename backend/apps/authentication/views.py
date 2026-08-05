@@ -14,9 +14,12 @@ from apps.authentication.serializers import (
     LogoutSerializer,
     PasswordResetConfirmSerializer,
     PasswordResetRequestSerializer,
+    ProfilePictureRequestSerializer,
+    ProfilePictureResponseSerializer,
     UserSummarySerializer,
 )
 from core.exceptions import ApiError
+from core.permissions.security import NotBlockedByPasswordChange
 
 
 class LoginView(APIView):
@@ -156,6 +159,22 @@ class ChangePasswordView(APIView):
             serializer.validated_data["new_password"],
         )
         return Response(status=204)
+
+
+class MyProfilePictureView(APIView):
+    permission_classes = [IsAuthenticated, NotBlockedByPasswordChange]
+
+    def post(self, request):
+        serializer = ProfilePictureRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        upload_url, profile_picture_url = services.request_profile_picture_upload(
+            user=request.user,
+            content_type=serializer.validated_data["content_type"],
+        )
+        response = ProfilePictureResponseSerializer(
+            {"upload_url": upload_url, "profile_picture_url": profile_picture_url}
+        )
+        return Response(response.data)
 
 
 class PasswordResetRequestView(APIView):

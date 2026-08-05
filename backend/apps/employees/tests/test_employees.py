@@ -31,6 +31,7 @@ def _org_admin():
 def _employee_payload(**overrides):
     payload = {
         "email": "newhire@example.com",
+        "password": "InitialHire1Pass!",
         "employee_number": "EMP0001",
         "first_name": "Asha",
         "last_name": "Mwangi",
@@ -42,7 +43,7 @@ def _employee_payload(**overrides):
     return payload
 
 
-def test_org_admin_can_create_employee_with_temp_password():
+def test_org_admin_can_create_employee_with_a_chosen_password():
     admin = _org_admin()
     client = _client_as(admin)
 
@@ -52,26 +53,40 @@ def test_org_admin_can_create_employee_with_temp_password():
     body = response.json()
     assert body["employee"]["employee_number"] == "EMP0001"
     assert body["employee"]["role"] == Role.EMPLOYEE
-    assert len(body["temporary_password"]) > 0
 
     user = UserAccount.objects.get(email="newhire@example.com")
     assert user.must_change_password is True
-    assert user.check_password(body["temporary_password"])
+    assert user.check_password("InitialHire1Pass!")
     assert user.organization_id == admin.organization_id
 
 
-def test_created_employee_can_log_in_with_temp_password_and_must_change_it():
+def test_creating_employee_rejects_a_weak_password():
+    admin = _org_admin()
+    client = _client_as(admin)
+
+    # >= min_length but all-numeric — passes the serializer's shape check,
+    # so this exercises core.validation's deeper NumericPasswordValidator
+    # check in the service layer, not just the serializer field.
+    response = client.post(
+        "/api/v1/employees", _employee_payload(password="1234567890")
+    )
+
+    assert response.status_code == 400
+    assert not UserAccount.objects.filter(email="newhire@example.com").exists()
+
+
+def test_created_employee_can_log_in_with_chosen_password_and_must_change_it():
     admin = _org_admin()
     client = _client_as(admin)
     create = client.post("/api/v1/employees", _employee_payload())
-    temp_password = create.json()["temporary_password"]
+    assert create.status_code == 201
 
     login = APIClient().post(
         "/api/v1/auth/login",
         {
             "organization_code": admin.organization.code,
             "identifier": "newhire@example.com",
-            "password": temp_password,
+            "password": "InitialHire1Pass!",
         },
     )
 

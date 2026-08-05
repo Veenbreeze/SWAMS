@@ -1,0 +1,333 @@
+{
+  "common": {
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading…",
+    "genericError": "Something went wrong. Please try again.",
+    "logOut": "Log out",
+    "close": "Close"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "departments": "Departments",
+    "branches": "Branches",
+    "attendance": "Attendance",
+    "reports": "Reports",
+    "leaves": "Leaves",
+    "notifications": "Notifications",
+    "recommendations": "Recommendations",
+    "settings": "Settings"
+  },
+  "pageStub": {
+    "comingSoon": "This page will be implemented in a later development phase."
+  },
+  "attendanceStatus": {
+    "PRESENT": "Present",
+    "LATE": "Late",
+    "EARLY_DEPARTURE": "Early Departure",
+    "OVERTIME": "Overtime",
+    "ABSENT": "Absent"
+  },
+  "login": {
+    "title": "Sign in to SWAMS",
+    "organizationCode": "Organization code",
+    "identifier": "Email or employee ID",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "genericError": "Unable to sign in. Check your credentials and try again."
+  },
+  "forceChangePassword": {
+    "title": "Change your password to continue",
+    "subtitle": "Your account has a temporary password. Set a new one to continue.",
+    "currentPassword": "Current (temporary) password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "submit": "Change password",
+    "validationError": "Please fill in both password fields.",
+    "mismatchError": "New password and confirmation do not match.",
+    "genericError": "Unable to change your password. Check your current password and try again."
+  },
+  "profileDialog": {
+    "title": "Your profile",
+    "changePicture": "Change picture",
+    "uploading": "Uploading…",
+    "pictureError": "Unable to upload this picture. Please try again.",
+    "passwordSectionTitle": "Change password",
+    "currentPasswordLabel": "Current password",
+    "newPasswordLabel": "New password",
+    "changePassword": "Change password",
+    "changingPassword": "Changing…",
+    "passwordSuccess": "Password changed.",
+    "passwordError": "Unable to change your password. Check your current password and try again."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "loading": "Loading dashboard…",
+    "error": "Unable to load the dashboard.",
+    "present": "Present",
+    "late": "Late",
+    "absent": "Absent",
+    "onLeave": "On Leave",
+    "last7Days": "Last 7 days"
+  },
+  "attendanceChart": {
+    "present": "Present",
+    "late": "Late",
+    "absent": "Absent"
+  },
+  "reports": {
+    "title": "Reports",
+    "loading": "Loading report…",
+    "error": "Unable to load the report.",
+    "present": "Present",
+    "late": "Late",
+    "earlyDeparture": "Early Departure",
+    "overtime": "Overtime",
+    "dailyAttendance": "Daily attendance",
+    "exportPdf": "Export PDF",
+    "exportXlsx": "Export Excel",
+    "preparing": "Preparing…",
+    "download": "Download",
+    "exportFailed": "Export failed.",
+    "exportFailedWithReason": "Export failed: {{reason}}"
+  },
+  "leaves": {
+    "title": "Leaves",
+    "loading": "Loading leave requests…",
+    "error": "Unable to load leave requests.",
+    "noResults": "No leave requests found.",
+    "filters": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    },
+    "table": {
+      "employee": "Employee",
+      "leaveType": "Leave type",
+      "dates": "Dates",
+      "days": "Days",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "approve": "Approve",
+    "reject": "Reject",
+    "balance": "Balance",
+    "rejectDialog": {
+      "title": "Reject leave request",
+      "description": "{{employeeName}} — {{leaveTypeName}}. A reason is required.",
+      "reasonLabel": "Reason",
+      "submit": "Reject request",
+      "submitting": "Rejecting…",
+      "genericError": "Unable to reject this request."
+    },
+    "balanceDialog": {
+      "title": "Leave balance",
+      "loading": "Loading balance…",
+      "error": "Unable to load leave balance.",
+      "noResults": "No balance records yet.",
+      "daysLeft": "{{remaining}} / {{allocated}} days left"
+    },
+    "manageTypes": "Manage leave types",
+    "manageTypesDialog": {
+      "title": "Leave types",
+      "description": "Employees choose from these when submitting a leave request.",
+      "loading": "Loading leave types…",
+      "error": "Unable to load leave types.",
+      "noResults": "No leave types yet.",
+      "daysPerYear": "{{days}} days / year",
+      "add": "Add leave type",
+      "editTitle": "Edit leave type",
+      "newTitle": "New leave type",
+      "nameLabel": "Name",
+      "daysLabel": "Default days per year",
+      "requiresApprovalLabel": "Requires approval",
+      "saveError": "Unable to save this leave type."
+    }
+  },
+  "departments": {
+    "new": "New department",
+    "loading": "Loading departments…",
+    "error": "Unable to load departments.",
+    "noResults": "No departments yet.",
+    "table": {
+      "name": "Name",
+      "parent": "Parent department",
+      "actions": "Actions"
+    },
+    "confirmDeleteTitle": "Delete department?",
+    "confirmDelete": "Delete department \"{{name}}\"? This only works if it has no active employees.",
+    "deleteError": "Unable to delete this department.",
+    "editTitle": "Edit department",
+    "newTitle": "New department",
+    "dialogDescription": "Departments can optionally nest under a parent department.",
+    "noParent": "No parent",
+    "saveError": "Unable to save this department."
+  },
+  "branches": {
+    "new": "New branch",
+    "loading": "Loading branches…",
+    "error": "Unable to load branches.",
+    "noResults": "No branches yet.",
+    "table": {
+      "name": "Name",
+      "address": "Address",
+      "radius": "Geofence radius",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "metersValue": "{{value}} m",
+    "active": "Active",
+    "inactive": "Inactive",
+    "editTitle": "Edit branch",
+    "newTitle": "New branch",
+    "editDescription": "Radius and accuracy limit control the geofence employees must check in from.",
+    "newDescription": "Capture the branch's real location before saving — coordinates are proof-of-GPS, not free text.",
+    "radiusLabel": "Geofence radius (meters)",
+    "accuracyLabel": "Max accepted GPS accuracy (meters)",
+    "currentLocation": "Location: {{lat}}, {{lng}}",
+    "noLocationYet": "No location captured yet.",
+    "locating": "Locating…",
+    "captureLocation": "Capture current location",
+    "updateLocation": "Update location",
+    "locationError": "Unable to read your location. Check browser location permissions.",
+    "poorAccuracyError": "This location reading is only accurate to {{meters}} m — too imprecise to set a branch's check-in point (max 50 m). Try again outdoors, away from buildings, ideally from a phone with GPS rather than a desktop.",
+    "saveError": "Unable to save this branch.",
+    "confirmDeleteTitle": "Delete branch?",
+    "confirmDelete": "Delete branch \"{{name}}\"? Employees assigned to it will be unassigned.",
+    "deleteError": "Unable to delete this branch."
+  },
+  "employees": {
+    "new": "New employee",
+    "loading": "Loading employees…",
+    "error": "Unable to load employees.",
+    "noResults": "No employees yet.",
+    "table": {
+      "name": "Name",
+      "number": "Employee #",
+      "email": "Email",
+      "role": "Role",
+      "department": "Department",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "resetPassword": "Reset password",
+    "confirmResetPasswordTitle": "Reset password?",
+    "confirmResetPassword": "Generate a new temporary password for this employee? Their current password will stop working.",
+    "terminate": "Terminate",
+    "confirmTerminateTitle": "Terminate employee?",
+    "confirmTerminate": "Terminate {{name}}? This cannot be undone from this screen.",
+    "editTitle": "Edit employee",
+    "newTitle": "New employee",
+    "editDescription": "Update this employee's details.",
+    "newDescription": "Creates a sign-in account with the password you set below.",
+    "roleEmployee": "Employee",
+    "roleManager": "Manager",
+    "passwordLabel": "Password",
+    "passwordHint": "The employee will be required to change this the first time they sign in.",
+    "numberLabel": "Employee number",
+    "firstNameLabel": "First name",
+    "lastNameLabel": "Last name",
+    "phoneLabel": "Phone",
+    "positionLabel": "Position",
+    "joiningDateLabel": "Joining date",
+    "shiftLabel": "Shift",
+    "noneOption": "None",
+    "saveError": "Unable to save this employee.",
+    "terminateError": "Unable to terminate this employee.",
+    "resetPasswordError": "Unable to reset this employee's password.",
+    "temporaryPasswordTitle": "Temporary password",
+    "temporaryPasswordDescription": "Copy this now and share it with the employee out-of-band — it will not be shown again.",
+    "done": "Done"
+  },
+  "attendance": {
+    "loading": "Loading attendance records…",
+    "error": "Unable to load attendance records.",
+    "noResults": "No attendance records match these filters.",
+    "filters": {
+      "date": "Date",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "allBranches": "All branches",
+      "allDepartments": "All departments"
+    },
+    "table": {
+      "employee": "Employee",
+      "branch": "Branch",
+      "date": "Date",
+      "checkIn": "Check in",
+      "checkOut": "Check out",
+      "status": "Status"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "shiftsHeading": "Shifts",
+    "newShift": "New shift",
+    "loadingShifts": "Loading shifts…",
+    "errorShifts": "Unable to load shifts.",
+    "noShifts": "No shifts configured yet.",
+    "shiftTable": {
+      "name": "Name",
+      "start": "Start time",
+      "end": "End time",
+      "crossesMidnight": "Crosses midnight",
+      "actions": "Actions"
+    },
+    "shiftDialog": {
+      "editTitle": "Edit shift",
+      "newTitle": "New shift",
+      "nameLabel": "Name",
+      "startLabel": "Start time",
+      "endLabel": "End time",
+      "crossesMidnightLabel": "Shift crosses midnight (e.g. overnight shift)",
+      "saveError": "Unable to save this shift."
+    },
+    "confirmDeleteShiftTitle": "Delete shift?",
+    "confirmDeleteShift": "Delete shift \"{{name}}\"?",
+    "deleteShiftError": "Unable to delete this shift.",
+    "ruleHeading": "Attendance rule",
+    "ruleDescription": "Controls how check-ins are classified org-wide.",
+    "loadingRule": "Loading attendance rule…",
+    "errorRule": "Unable to load the attendance rule.",
+    "workingDaysLabel": "Working days",
+    "lateThresholdLabel": "Late threshold (minutes)",
+    "earlyDepartureThresholdLabel": "Early departure threshold (minutes)",
+    "overtimeThresholdLabel": "Overtime threshold (minutes)",
+    "ruleSaveError": "Unable to save the attendance rule.",
+    "ruleSaved": "Saved.",
+    "days": {
+      "0": "Mon",
+      "1": "Tue",
+      "2": "Wed",
+      "3": "Thu",
+      "4": "Fri",
+      "5": "Sat",
+      "6": "Sun"
+    }
+  },
+  "notifications": {
+    "loading": "Loading notifications…",
+    "error": "Unable to load notifications.",
+    "noResults": "No notifications yet.",
+    "markAllRead": "Mark all as read",
+    "markRead": "Mark as read",
+    "new": "New",
+    "filters": {
+      "all": "All",
+      "unread": "Unread",
+      "read": "Read"
+    }
+  },
+  "recommendations": {
+    "loading": "Loading recommendations…",
+    "error": "Unable to load recommendations.",
+    "noResults": "No recommendations yet."
+  }
+}

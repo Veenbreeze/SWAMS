@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pytest
+from django.test import override_settings
 from rest_framework.test import APIClient
 
 from apps.authentication.models import Role
@@ -97,10 +98,13 @@ def test_rejects_oversized_file():
     assert response.status_code == 400
 
 
-def test_storage_not_configured_surfaces_as_clean_503():
+@override_settings(DEBUG=False)
+def test_storage_not_configured_surfaces_as_clean_503_outside_debug():
     # No mocking here: SUPABASE_URL/SUPABASE_SERVICE_KEY are blank by
     # default in local/test settings, exercising the real
-    # StorageNotConfiguredError path end-to-end.
+    # StorageNotConfiguredError path end-to-end. DEBUG is forced off here
+    # to exercise the production-like branch — see the DEBUG=True fallback
+    # test below for local dev's behavior under the same unconfigured state.
     assert supabase_client.settings.SUPABASE_URL == ""
     user = UserAccountFactory(password=PASSWORD, role=Role.EMPLOYEE)
     employee = EmployeeFactory(user=user)
@@ -114,3 +118,30 @@ def test_storage_not_configured_surfaces_as_clean_503():
 
     assert response.status_code == 503
     assert response.json()["error"]["code"] == "STORAGE_NOT_CONFIGURED"
+
+
+@override_settings(DEBUG=True)
+def test_storage_not_configured_falls_back_to_local_dev_storage_under_debug():
+    # Calls the service directly rather than through the HTTP client:
+    # pytest-django forces settings.DEBUG False for the whole test session
+    # regardless of core.settings.local's own DEBUG=True, and going through
+    # a real request with DEBUG=True also activates debug_toolbar's
+    # middleware, whose own URLs are never registered under that forced
+    # DEBUG=False at urlconf import time — a failure unrelated to this path.
+    from django.conf import settings
+
+    from apps.employees import services
+
+    assert supabase_client.settings.SUPABASE_URL == ""
+    user = UserAccountFactory(password=PASSWORD, role=Role.EMPLOYEE)
+    employee = EmployeeFactory(user=user)
+
+    upload_url, profile_picture_url = services.request_profile_picture_upload(
+        employee=employee, content_type="image/jpeg", actor=user
+    )
+
+    assert upload_url.startswith(settings.LOCAL_DEV_PUBLIC_BASE_URL)
+    assert profile_picture_url.startswith(settings.LOCAL_DEV_PUBLIC_BASE_URL)
+
+    employee.refresh_from_db()
+    assert employee.profile_picture_url == profile_picture_url

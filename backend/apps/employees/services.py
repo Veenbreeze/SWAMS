@@ -11,7 +11,8 @@ from apps.audit_logs.services import AuditLogger
 from apps.authentication.models import Role, UserAccount
 from apps.employees.models import Department, Employee, EmploymentStatus, ManagerAssignment
 from core.exceptions import ApiError
-from storage import supabase_client
+from core.validation import validate_password_strength
+from storage import local_dev, supabase_client
 
 _CONTENT_TYPE_EXTENSIONS = {
     "image/jpeg": "jpg",
@@ -93,9 +94,14 @@ def delete_department(*, department, actor, request=None):
 def create_employee(*, organization, data, actor, request=None):
     """Bootstraps the `UserAccount` + `Employee` pair in one call, mirroring
     `apps.organizations.services.create_organization`'s two-step shape.
+
+    The Org Admin chooses this employee's password directly (rather than
+    the system generating one) — `must_change_password` still forces the
+    employee to set their own on first login.
     """
     data = dict(data)
     email = data.pop("email")
+    password = data.pop("password")
     role = data.pop("role", Role.EMPLOYEE)
 
     # Checked explicitly, before creating anything: the DB-level
@@ -108,10 +114,10 @@ def create_employee(*, organization, data, actor, request=None):
     ).exists():
         raise EmployeeNumberTakenError()
 
-    temporary_password = _generate_temporary_password()
+    validate_password_strength(password, field="password")
     user = UserAccount.objects.create_user(
         email=email,
-        password=temporary_password,
+        password=password,
         organization=organization,
         role=role,
         employee_number=data.get("employee_number"),
@@ -127,7 +133,7 @@ def create_employee(*, organization, data, actor, request=None):
         description=f"Created employee {employee.employee_number} ({email}).",
         request=request,
     )
-    return employee, temporary_password
+    return employee
 
 
 def update_employee(*, employee, data, actor, request=None):
@@ -200,8 +206,18 @@ def request_profile_picture_upload(*, employee, content_type, actor, request=Non
         upload_url, path = supabase_client.create_signed_upload_path(
             bucket=bucket, path_prefix=path_prefix, extension=extension
         )
+        public_url = supabase_client.public_url(bucket=bucket, path=path)
     except supabase_client.StorageNotConfiguredError as exc:
-        raise StorageUnavailableError() from exc
+        # Expected in local dev without a provisioned Supabase project —
+        # fall back to writing the file to this machine's own MEDIA_ROOT
+        # instead, so profile-picture upload is still testable end-to-end.
+        # Never taken in production: DEBUG is always False there.
+        if not settings.DEBUG:
+            raise StorageUnavailableError() from exc
+        upload_url, path = local_dev.create_local_upload_path(
+            bucket=bucket, path_prefix=path_prefix, extension=extension
+        )
+        public_url = local_dev.local_public_url(bucket=bucket, path=path)
     except supabase_client.StorageRequestError as exc:
         raise ApiError(
             code="STORAGE_REQUEST_FAILED", status_code=502, message=str(exc)
@@ -213,7 +229,7 @@ def request_profile_picture_upload(*, employee, content_type, actor, request=Non
     # requiring a separate confirmation round-trip the API spec doesn't
     # define — a client that never uploads just leaves a 404ing image URL,
     # same as any presigned-upload flow.
-    employee.profile_picture_url = supabase_client.public_url(bucket=bucket, path=path)
+    employee.profile_picture_url = public_url
     employee.save(update_fields=["profile_picture_url"])
 
     AuditLogger.record(

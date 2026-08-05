@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    // Required to silence the TypeScript 6 deprecation warning for baseUrl
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "include": ["src"]
 }
+

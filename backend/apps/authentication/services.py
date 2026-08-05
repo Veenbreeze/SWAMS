@@ -7,9 +7,7 @@ layer even without full domain/application/infrastructure folders).
 from datetime import timedelta
 
 from django.conf import settings
-from django.contrib.auth import password_validation
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.utils import timezone
@@ -21,6 +19,24 @@ from apps.authentication.models import Device, LoginHistory, Role, UserAccount
 from apps.organizations.models import Organization, OrganizationStatus
 from core.db import rls
 from core.exceptions import ApiError
+from core.validation import validate_password_strength
+from storage import local_dev, supabase_client
+
+# Local copy, not an import from apps.employees.services — that module
+# imports apps.authentication.models, so importing back from it here would
+# be a circular import (same reasoning as UserSummarySerializer.get_employee's
+# local import, just at module scope instead).
+_PROFILE_PICTURE_CONTENT_TYPE_EXTENSIONS = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+}
+
+
+class StorageUnavailableError(ApiError):
+    code = "STORAGE_NOT_CONFIGURED"
+    status_code = 503
+    default_message = "File storage is not configured for this environment."
 
 
 def _max_failed_attempts():
@@ -169,18 +185,6 @@ def _issue_tokens(user):
     return str(refresh.access_token), str(refresh)
 
 
-def _validate_password_strength(password, user):
-    try:
-        password_validation.validate_password(password, user=user)
-    except DjangoValidationError as exc:
-        raise ApiError(
-            code="VALIDATION_ERROR",
-            status_code=400,
-            message="Password does not meet security requirements.",
-            details={"new_password": exc.messages},
-        ) from exc
-
-
 def _find_user(organization, identifier):
     return (
         UserAccount.objects.filter(organization=organization)
@@ -311,11 +315,43 @@ def change_password(user, current_password, new_password):
             status_code=401,
             message="Current password is incorrect.",
         )
-    _validate_password_strength(new_password, user)
+    validate_password_strength(new_password, user=user, field="new_password")
     user.set_password(new_password)
     user.must_change_password = False
     user.save(update_fields=["password", "must_change_password"])
     _notify_password_changed(user)
+
+
+def request_profile_picture_upload(*, user, content_type):
+    """Same presigned-upload pattern as
+    apps.employees.services.request_profile_picture_upload, generalized to
+    any UserAccount — Org Admin / Super Admin accounts have no Employee
+    row to hang a picture off of, so it lives on UserAccount directly.
+    """
+    extension = _PROFILE_PICTURE_CONTENT_TYPE_EXTENSIONS[content_type]
+    bucket = settings.SUPABASE_STORAGE_BUCKET_PROFILE_PICTURES
+    path_prefix = f"{user.organization_id or 'platform'}/{user.id}"
+
+    try:
+        upload_url, path = supabase_client.create_signed_upload_path(
+            bucket=bucket, path_prefix=path_prefix, extension=extension
+        )
+        public_url = supabase_client.public_url(bucket=bucket, path=path)
+    except supabase_client.StorageNotConfiguredError as exc:
+        if not settings.DEBUG:
+            raise StorageUnavailableError() from exc
+        upload_url, path = local_dev.create_local_upload_path(
+            bucket=bucket, path_prefix=path_prefix, extension=extension
+        )
+        public_url = local_dev.local_public_url(bucket=bucket, path=path)
+    except supabase_client.StorageRequestError as exc:
+        raise ApiError(
+            code="STORAGE_REQUEST_FAILED", status_code=502, message=str(exc)
+        ) from exc
+
+    user.profile_picture_url = public_url
+    user.save(update_fields=["profile_picture_url"])
+    return upload_url, user.profile_picture_url
 
 
 def request_password_reset(*, organization_code, identifier):
@@ -358,7 +394,7 @@ def confirm_password_reset(*, uidb64, token, new_password):
     if not password_reset_token_generator.check_token(user, token):
         raise InvalidResetTokenError()
 
-    _validate_password_strength(new_password, user)
+    validate_password_strength(new_password, user=user, field="new_password")
     user.set_password(new_password)
     user.must_change_password = False
     user.failed_login_attempts = 0

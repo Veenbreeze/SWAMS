@@ -3,12 +3,14 @@
 A multi-tenant SaaS platform for GPS/geofence-based employee attendance,
 built for organizations in Tanzania and beyond.
 
-**Status:** Architecture & design phase — no application code yet, per the
-project's phased development process (see roadmap).
+**Status:** Phases 1–9 of the roadmap are implemented — multi-tenant
+backend (auth, organizations, employees, attendance/geofencing, leave,
+reports, notifications, subscriptions), both web admin apps, and the
+employee mobile app, all with English/Kiswahili i18n. See
+[`docs/05-DEVELOPMENT-ROADMAP.md`](docs/05-DEVELOPMENT-ROADMAP.md) for
+per-phase acceptance criteria and what's covered.
 
 ## Design Documents
-
-Read in this order before any implementation work begins:
 
 1. [`docs/01-SYSTEM-ARCHITECTURE.md`](docs/01-SYSTEM-ARCHITECTURE.md) —
    architecture, multi-tenancy model, RBAC, security design, deployment
@@ -21,6 +23,8 @@ Read in this order before any implementation work begins:
    repository/folder layout for backend, both web apps, and mobile.
 5. [`docs/05-DEVELOPMENT-ROADMAP.md`](docs/05-DEVELOPMENT-ROADMAP.md) —
    phased implementation plan with acceptance criteria per phase.
+6. [`docs/06-RUNBOOK.md`](docs/06-RUNBOOK.md) — how to deploy, roll back,
+   rotate secrets, and onboard a new organization.
 
 ## Stack
 

@@ -358,9 +358,11 @@ so business code calls `notify(event, recipients)` once, not three times.
 
 - Backend: Render Web Service, Gunicorn (`gunicorn core.wsgi`), health
   check endpoint `/api/v1/health/`, `DATABASE_URL` pointed at Supabase
-  Postgres (connection pooled via Supabase's PgBouncer / `pgbouncer=true`
-  mode to survive Render's short-lived dynos + Django's per-request
-  connections).
+  Postgres via its **session-mode** pooler (not PgBouncer's transaction-
+  pooling mode — that mode doesn't support Django's per-request `SET
+  app.current_org_id` tenant-context call staying bound to one connection
+  for the life of a request; see `core/settings/base.py`'s `CONN_MAX_AGE`
+  comment).
 - Background: a separate Render Worker service for Celery, and a Render
   Cron/worker for Celery Beat (subscription-expiry checks, daily/weekly
   report pre-generation, stale-session cleanup).

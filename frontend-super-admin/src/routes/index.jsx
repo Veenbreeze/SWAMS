@@ -7,6 +7,7 @@ import ForceChangePassword from "@/pages/auth/ForceChangePassword";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import OrganizationList from "@/pages/organizations/OrganizationList";
 import PlanList from "@/pages/subscriptions/PlanList";
+import ExpiryMonitor from "@/pages/subscriptions/ExpiryMonitor";
 import AuditLogViewer from "@/pages/audit-logs/AuditLogViewer";
 import SecurityEvents from "@/pages/security/SecurityEvents";
 import PlatformSettings from "@/pages/settings/PlatformSettings";
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
           { path: "/dashboard", element: <Dashboard /> },
           { path: "/organizations", element: <OrganizationList /> },
           { path: "/subscriptions", element: <PlanList /> },
+          { path: "/subscriptions/expiry", element: <ExpiryMonitor /> },
           { path: "/audit-logs", element: <AuditLogViewer /> },
           { path: "/security", element: <SecurityEvents /> },
           { path: "/settings", element: <PlatformSettings /> },

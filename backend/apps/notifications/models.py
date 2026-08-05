@@ -9,6 +9,7 @@ class NotificationCategory(models.TextChoices):
     ATTENDANCE = "ATTENDANCE", "Attendance"
     LEAVE = "LEAVE", "Leave"
     SECURITY = "SECURITY", "Security"
+    SUBSCRIPTION = "SUBSCRIPTION", "Subscription"
     SYSTEM = "SYSTEM", "System"
 
 

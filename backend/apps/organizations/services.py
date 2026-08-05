@@ -2,12 +2,12 @@
 and docs/05-DEVELOPMENT-ROADMAP.md Phase 3.
 """
 
-import secrets
-
 from apps.audit_logs.services import AuditLogger
 from apps.authentication.models import Role, UserAccount
+from apps.leave.services import seed_default_leave_types
 from apps.organizations.models import Organization, OrganizationStatus
 from core.exceptions import ApiError
+from core.validation import validate_password_strength
 
 
 class OrganizationStatusUnchangedError(ApiError):
@@ -16,24 +16,23 @@ class OrganizationStatusUnchangedError(ApiError):
     default_message = "The organization already has this status."
 
 
-def _generate_temporary_password():
-    # url-safe, >= AUTH_PASSWORD_VALIDATORS' min_length=10, not a common
-    # password, not all-numeric — satisfies every configured validator
-    # without needing to run them speculatively.
-    return secrets.token_urlsafe(12)
-
-
-def create_organization(*, data, admin_email, actor, request=None):
+def create_organization(*, data, admin_email, admin_password, actor, request=None):
     """Creates the organization and bootstraps its first Org Admin in one
     transaction-free two-step (Organization has no FK dependency on the
     admin user, so partial failure only orphans an org, never a user).
-    """
-    organization = Organization.objects.create(**data)
 
-    temporary_password = _generate_temporary_password()
+    The Super Admin chooses `admin_password` directly (rather than the
+    system generating one) — `must_change_password` still forces the Org
+    Admin to set their own on first login, since a password someone else
+    picked for them shouldn't stay the permanent one.
+    """
+    validate_password_strength(admin_password, field="admin_password")
+    organization = Organization.objects.create(**data)
+    seed_default_leave_types(organization=organization)
+
     admin = UserAccount.objects.create_user(
         email=admin_email,
-        password=temporary_password,
+        password=admin_password,
         organization=organization,
         role=Role.ORG_ADMIN,
         must_change_password=True,
@@ -47,7 +46,7 @@ def create_organization(*, data, admin_email, actor, request=None):
         request=request,
     )
 
-    return organization, admin, temporary_password
+    return organization, admin
 
 
 def update_organization(*, organization, data, actor, request=None):

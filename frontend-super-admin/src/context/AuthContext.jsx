@@ -1,5 +1,9 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import { login as loginRequest, logout as logoutRequest } from "@/api/endpoints/auth";
+import {
+  changePassword as changePasswordRequest,
+  login as loginRequest,
+  logout as logoutRequest,
+} from "@/api/endpoints/auth";
 import { setAuthTokens, clearAuthTokens, setOnAuthExpired } from "@/api/client";
 
 export const AuthContext = createContext(null);
@@ -22,6 +26,15 @@ export function AuthProvider({ children }) {
     return data;
   }, []);
 
+  const completeForcedPasswordChange = useCallback(async ({ currentPassword, newPassword }) => {
+    await changePasswordRequest({ currentPassword, newPassword });
+    setMustChangePassword(false);
+  }, []);
+
+  const updateUser = useCallback((patch) => {
+    setUser((current) => (current ? { ...current, ...patch } : current));
+  }, []);
+
   const logout = useCallback(async () => {
     try {
       if (refreshToken) await logoutRequest(refreshToken);
@@ -41,8 +54,16 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, isAuthenticated: Boolean(user), mustChangePassword, login, logout }),
-    [user, mustChangePassword, login, logout]
+    () => ({
+      user,
+      isAuthenticated: Boolean(user),
+      mustChangePassword,
+      login,
+      logout,
+      completeForcedPasswordChange,
+      updateUser,
+    }),
+    [user, mustChangePassword, login, logout, completeForcedPasswordChange, updateUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

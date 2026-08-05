@@ -127,6 +127,84 @@ def test_export_job_marked_failed_when_storage_is_not_configured():
     assert "SUPABASE" in job.error_message.upper() or "storage" in job.error_message.lower()
 
 
+@patch("apps.reports.tasks.supabase_client.create_signed_download_url")
+@patch("apps.reports.tasks.supabase_client.upload_object")
+def test_weekly_export_completes(mock_upload, mock_sign):
+    mock_sign.return_value = "https://storage.example/signed-download-url"
+    admin = _org_admin()
+    employee = EmployeeFactory(user__organization=admin.organization)
+    AttendanceFactory(employee=employee, attendance_date=MONDAY, status=AttendanceStatus.PRESENT)
+    client = _client_as(admin)
+
+    response = _export(client, "weekly", format="pdf", start=str(MONDAY))
+
+    assert response.status_code == 202
+    job = _get_job(response.json()["job_id"])
+    assert job.status == ExportStatus.COMPLETED
+
+
+def test_weekly_export_requires_start_param():
+    admin = _org_admin()
+    client = _client_as(admin)
+
+    response = _export(client, "weekly", format="pdf")
+
+    assert response.status_code == 400
+
+
+@patch("apps.reports.tasks.supabase_client.create_signed_download_url")
+@patch("apps.reports.tasks.supabase_client.upload_object")
+def test_monthly_export_completes(mock_upload, mock_sign):
+    mock_sign.return_value = "https://storage.example/signed-download-url"
+    admin = _org_admin()
+    employee = EmployeeFactory(user__organization=admin.organization)
+    AttendanceFactory(employee=employee, attendance_date=MONDAY, status=AttendanceStatus.PRESENT)
+    client = _client_as(admin)
+
+    response = _export(client, "monthly", format="xlsx", month="2026-08")
+
+    assert response.status_code == 202
+    job = _get_job(response.json()["job_id"])
+    assert job.status == ExportStatus.COMPLETED
+
+
+def test_monthly_export_rejects_malformed_month():
+    admin = _org_admin()
+    client = _client_as(admin)
+
+    response = _export(client, "monthly", format="pdf", month="not-a-month")
+
+    assert response.status_code == 400
+
+
+def test_employee_export_requires_employee_id():
+    admin = _org_admin()
+    client = _client_as(admin)
+
+    response = _export(client, "employee", format="pdf")
+
+    assert response.status_code == 400
+
+
+def test_department_export_requires_department_id():
+    admin = _org_admin()
+    client = _client_as(admin)
+
+    response = _export(client, "department", format="pdf")
+
+    assert response.status_code == 400
+
+
+def test_employee_role_cannot_export_reports_requiring_manager_or_above():
+    user = UserAccountFactory(password=PASSWORD, role=Role.EMPLOYEE)
+    EmployeeFactory(user=user)
+    client = _client_as(user)
+
+    response = _export(client, "weekly", format="pdf", start=str(MONDAY))
+
+    assert response.status_code == 403
+
+
 def test_export_rejects_invalid_report_type():
     admin = _org_admin()
     client = _client_as(admin)

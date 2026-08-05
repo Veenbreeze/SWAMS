@@ -10,6 +10,16 @@ class LeaveTypeSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
+class LeaveTypeWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LeaveType
+        fields = ["name", "default_annual_days", "requires_approval"]
+        extra_kwargs = {
+            "default_annual_days": {"required": False},
+            "requires_approval": {"required": False},
+        }
+
+
 class LeaveRequestSerializer(serializers.ModelSerializer):
     employee_id = serializers.UUIDField(source="employee.id", read_only=True)
     employee_name = serializers.CharField(source="employee.full_name", read_only=True)

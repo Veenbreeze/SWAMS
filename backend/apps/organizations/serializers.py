@@ -24,11 +24,15 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
 
 class OrganizationCreateSerializer(serializers.ModelSerializer):
-    # The Super Admin supplies the first Org Admin's sign-in email; the
-    # account itself (and its temporary password) is created by
+    # The Super Admin supplies the first Org Admin's sign-in email and
+    # initial password; the account itself is created by
     # services.create_organization, not by this serializer — a serializer
-    # validates shape, it doesn't perform side effects.
+    # validates shape, it doesn't perform side effects. Strength is
+    # re-checked in the service layer (core.validation), since Django's
+    # validators need the not-yet-created UserAccount to check similarity
+    # against — min_length here is just a cheap, immediate shape check.
     admin_email = serializers.EmailField(write_only=True)
+    admin_password = serializers.CharField(write_only=True, min_length=10)
 
     class Meta:
         model = Organization
@@ -41,6 +45,7 @@ class OrganizationCreateSerializer(serializers.ModelSerializer):
             "address",
             "logo_url",
             "admin_email",
+            "admin_password",
         ]
 
 
@@ -54,4 +59,3 @@ class OrganizationUpdateSerializer(serializers.ModelSerializer):
 class OrganizationCreateResponseSerializer(serializers.Serializer):
     organization = OrganizationSerializer()
     admin = UserSummarySerializer()
-    temporary_password = serializers.CharField()

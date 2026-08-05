@@ -16,12 +16,14 @@ from apps.leave.serializers import (
     LeaveRequestSerializer,
     LeaveRequestUpdateSerializer,
     LeaveTypeSerializer,
+    LeaveTypeWriteSerializer,
 )
-from core.permissions.roles import IsManagerOrAbove
+from core.permissions.roles import IsManagerOrAbove, IsOrgAdmin
 from core.permissions.security import NotBlockedByPasswordChange
 
 _ANY_AUTHENTICATED = [IsAuthenticated, NotBlockedByPasswordChange]
 _APPROVER_PERMISSIONS = [IsAuthenticated, NotBlockedByPasswordChange, IsManagerOrAbove]
+_ORG_ADMIN_PERMISSIONS = [IsAuthenticated, NotBlockedByPasswordChange, IsOrgAdmin]
 
 
 def _employee_for(user):
@@ -41,12 +43,53 @@ def _can_view(*, user, leave_request):
     return leave_request.employee.user_id == user.id
 
 
-class LeaveTypeListView(generics.ListAPIView):
-    serializer_class = LeaveTypeSerializer
-    permission_classes = _ANY_AUTHENTICATED
+class LeaveTypeListView(generics.ListCreateAPIView):
+    def get_queryset(self):
+        return LeaveType.objects.all()
+
+    def get_permissions(self):
+        permissions = _ANY_AUTHENTICATED if self.request.method == "GET" else _ORG_ADMIN_PERMISSIONS
+        return [permission() for permission in permissions]
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return LeaveTypeWriteSerializer
+        return LeaveTypeSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        leave_type = services.create_leave_type(
+            organization=request.user.organization,
+            data=serializer.validated_data,
+            actor=request.user,
+            request=request,
+        )
+        return Response(LeaveTypeSerializer(leave_type).data, status=201)
+
+
+class LeaveTypeDetailView(generics.RetrieveUpdateAPIView):
+    permission_classes = _ORG_ADMIN_PERMISSIONS
 
     def get_queryset(self):
         return LeaveType.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            return LeaveTypeWriteSerializer
+        return LeaveTypeSerializer
+
+    def patch(self, request, *args, **kwargs):
+        leave_type = self.get_object()
+        serializer = self.get_serializer(leave_type, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        services.update_leave_type(
+            leave_type=leave_type,
+            data=serializer.validated_data,
+            actor=request.user,
+            request=request,
+        )
+        return Response(LeaveTypeSerializer(leave_type).data)
 
 
 class LeaveRequestListCreateView(generics.ListCreateAPIView):

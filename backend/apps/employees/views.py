@@ -110,15 +110,13 @@ class EmployeeListCreateView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        employee, temporary_password = services.create_employee(
+        employee = services.create_employee(
             organization=request.user.organization,
             data=serializer.validated_data,
             actor=request.user,
             request=request,
         )
-        response = EmployeeCreateResponseSerializer(
-            {"employee": employee, "temporary_password": temporary_password}
-        )
+        response = EmployeeCreateResponseSerializer({"employee": employee})
         return Response(response.data, status=201)
 
 

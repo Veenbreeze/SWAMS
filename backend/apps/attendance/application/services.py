@@ -38,14 +38,22 @@ def _validate_location(*, employee, branch, gps, request=None):
     if branch is None:
         raise domain_errors.NoBranchAssignedError()
 
+    if gps.accuracy > branch.gps_accuracy_limit_meters:
+        raise domain_errors.PoorGpsAccuracyError()
+
     distance = haversine_distance_meters(
         gps.latitude, gps.longitude, float(branch.latitude), float(branch.longitude)
     )
-    if distance > branch.radius_meters:
+    # A GPS fix is a center point, not a guarantee — the device itself
+    # reports up to `gps.accuracy` meters of uncertainty in that reading
+    # (already accepted above as "good enough"). Comparing the raw
+    # distance straight against `radius_meters` treats every reading as
+    # exact, so ordinary GPS jitter within the accepted accuracy margin
+    # could put a genuinely-present employee just outside the boundary.
+    # Extending the boundary by that same margin makes the two checks
+    # consistent with each other.
+    if distance > branch.radius_meters + gps.accuracy:
         raise domain_errors.OutsideGeofenceError()
-
-    if gps.accuracy > branch.gps_accuracy_limit_meters:
-        raise domain_errors.PoorGpsAccuracyError()
 
     if gps.is_mock_location:
         SecurityEventLogger.record(

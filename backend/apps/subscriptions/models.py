@@ -19,6 +19,13 @@ class SubscriptionPlan(models.Model):
     monthly_price = models.DecimalField(max_digits=12, decimal_places=2)
     features = models.JSONField(default=dict, blank=True)
     is_active = models.BooleanField(default=True)
+    grace_period_days = models.PositiveIntegerField(
+        default=7,
+        help_text=(
+            "Days an organization keeps login access after a subscription on this "
+            "plan expires, before it is auto-suspended — see Phase 8's expiry job."
+        ),
+    )
 
     class Meta:
         ordering = ["monthly_price"]

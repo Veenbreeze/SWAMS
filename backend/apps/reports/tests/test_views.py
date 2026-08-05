@@ -84,6 +84,23 @@ def test_weekly_report_requires_start_param():
     assert response.status_code == 400
 
 
+def test_weekly_report_returns_aggregated_counts():
+    admin = _org_admin()
+    AttendanceRule.objects.all_tenants().create(
+        organization=admin.organization, working_days=[0, 1, 2, 3, 4]
+    )
+    employee = EmployeeFactory(user__organization=admin.organization)
+    AttendanceFactory(employee=employee, attendance_date=MONDAY, status=AttendanceStatus.PRESENT)
+    client = _client_as(admin)
+
+    response = client.get("/api/v1/reports/weekly", {"start": str(MONDAY)})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["days"]) == 7
+    assert body["totals"]["present"] == 1
+
+
 def test_monthly_report_requires_month_param():
     admin = _org_admin()
     client = _client_as(admin)
@@ -95,6 +112,15 @@ def test_monthly_report_requires_month_param():
     ok = client.get("/api/v1/reports/monthly", {"month": "2026-08"})
     assert ok.status_code == 200
     assert len(ok.json()["days"]) == 31
+
+
+def test_monthly_report_rejects_malformed_month():
+    admin = _org_admin()
+    client = _client_as(admin)
+
+    response = client.get("/api/v1/reports/monthly", {"month": "not-a-month"})
+
+    assert response.status_code == 400
 
 
 def test_employee_can_view_their_own_report_but_not_anothers():

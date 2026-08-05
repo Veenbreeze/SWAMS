@@ -56,6 +56,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     )
     email = models.EmailField()
     employee_number = models.CharField(max_length=50, null=True, blank=True)
+    profile_picture_url = models.URLField(blank=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.EMPLOYEE)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

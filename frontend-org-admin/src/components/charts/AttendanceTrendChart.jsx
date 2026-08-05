@@ -8,21 +8,24 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-
-// present/late/absent are genuinely status states (not arbitrary
-// categories), so they draw from the reserved status palette rather than
-// the categorical one — see dataviz skill's color-formula.md.
-const SERIES = [
-  { key: "present", label: "Present", color: "var(--color-status-good)" },
-  { key: "late", label: "Late", color: "var(--color-status-warning)" },
-  { key: "absent", label: "Absent", color: "var(--color-status-critical)" },
-];
+import { useTranslation } from "react-i18next";
 
 function formatDate(value) {
   return new Date(value).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
 export function AttendanceTrendChart({ data }) {
+  const { t } = useTranslation();
+
+  // present/late/absent are genuinely status states (not arbitrary
+  // categories), so they draw from the reserved status palette rather than
+  // the categorical one — see dataviz skill's color-formula.md.
+  const series = [
+    { key: "present", label: t("attendanceChart.present"), color: "var(--color-status-good)" },
+    { key: "late", label: t("attendanceChart.late"), color: "var(--color-status-warning)" },
+    { key: "absent", label: t("attendanceChart.absent"), color: "var(--color-status-critical)" },
+  ];
+
   return (
     <ResponsiveContainer width="100%" height={280}>
       <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
@@ -52,15 +55,15 @@ export function AttendanceTrendChart({ data }) {
           }}
         />
         <Legend wrapperStyle={{ fontSize: 12 }} />
-        {SERIES.map((series) => (
+        {series.map((s) => (
           <Line
-            key={series.key}
-            dataKey={series.key}
-            name={series.label}
-            stroke={series.color}
+            key={s.key}
+            dataKey={s.key}
+            name={s.label}
+            stroke={s.color}
             strokeWidth={2}
             strokeLinecap="round"
-            dot={{ r: 3, strokeWidth: 0, fill: series.color }}
+            dot={{ r: 3, strokeWidth: 0, fill: s.color }}
             activeDot={{ r: 5 }}
             isAnimationActive={false}
           />

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import {
+  changePassword as changePasswordRequest,
   login as loginRequest,
   logout as logoutRequest,
   me as meRequest,
@@ -60,6 +61,37 @@ export function AuthProvider({ children }) {
     return data;
   }, []);
 
+  // Used by ForceChangePasswordScreen: the server accepts the request
+  // (change-password is the one endpoint that stays open while
+  // `must_change_password` is set — see Architecture §6.1), then this
+  // clears the flag and rehydrates `user` so the app transitions straight
+  // into AppTabNavigator without a second login.
+  const completeForcedPasswordChange = useCallback(async ({ currentPassword, newPassword }) => {
+    await changePasswordRequest({ currentPassword, newPassword });
+    const freshUser = await meRequest();
+    setUser(freshUser);
+    setMustChangePassword(false);
+  }, []);
+
+  // Voluntary change from SettingsScreen — unlike completeForcedPasswordChange,
+  // this doesn't touch `mustChangePassword` (it's already false whenever
+  // Settings is reachable) or need to rehydrate `user`, since nothing
+  // about the account's auth state changes besides the password itself.
+  const changePassword = useCallback(async ({ currentPassword, newPassword }) => {
+    await changePasswordRequest({ currentPassword, newPassword });
+  }, []);
+
+  // Lets screens that mutate the employee's own record (ProfileScreen's
+  // picture/phone edits) push the change into shared state immediately —
+  // without this, DashboardScreen and anywhere else reading `user.employee`
+  // would keep showing stale data until the next full `/auth/me` refetch
+  // (app restart or re-login), since nothing else here invalidates it.
+  const updateEmployee = useCallback((patch) => {
+    setUser((current) =>
+      current?.employee ? { ...current, employee: { ...current.employee, ...patch } } : current
+    );
+  }, []);
+
   const logout = useCallback(async () => {
     try {
       const { refresh } = await loadTokens();
@@ -79,8 +111,20 @@ export function AuthProvider({ children }) {
       isBootstrapping,
       login,
       logout,
+      completeForcedPasswordChange,
+      changePassword,
+      updateEmployee,
     }),
-    [user, mustChangePassword, isBootstrapping, login, logout]
+    [
+      user,
+      mustChangePassword,
+      isBootstrapping,
+      login,
+      logout,
+      completeForcedPasswordChange,
+      changePassword,
+      updateEmployee,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

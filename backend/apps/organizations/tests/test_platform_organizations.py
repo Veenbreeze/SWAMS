@@ -21,6 +21,7 @@ def _new_org_payload(**overrides):
         "address": "1 Example Street",
         "logo_url": "",
         "admin_email": "admin@neworg.example",
+        "admin_password": "InitialAdmin1Pass!",
     }
     payload.update(overrides)
     return payload
@@ -51,15 +52,29 @@ def test_super_admin_can_create_organization_and_bootstrap_org_admin():
     assert body["organization"]["code"] == "NEWORG01"
     assert body["admin"]["email"] == "admin@neworg.example"
     assert body["admin"]["role"] == Role.ORG_ADMIN
-    assert len(body["temporary_password"]) > 0
 
     org_admin = UserAccount.objects.get(email="admin@neworg.example")
     assert org_admin.must_change_password is True
-    assert org_admin.check_password(body["temporary_password"])
+    assert org_admin.check_password("InitialAdmin1Pass!")
 
     log = AuditLog.objects.all_tenants().get(action="organization.created")
     assert log.organization.code == "NEWORG01"
     assert log.user == admin
+
+
+def test_creating_organization_rejects_a_weak_admin_password():
+    admin = SuperAdminFactory(password=PASSWORD)
+    client = _client_as(admin)
+
+    # >= min_length but all-numeric — passes the serializer's shape check,
+    # so this exercises core.validation's deeper NumericPasswordValidator
+    # check in the service layer, not just the serializer field.
+    response = client.post(
+        "/api/v1/platform/organizations", _new_org_payload(admin_password="1234567890")
+    )
+
+    assert response.status_code == 400
+    assert not UserAccount.objects.filter(email="admin@neworg.example").exists()
 
 
 @pytest.mark.parametrize("role", [Role.ORG_ADMIN, Role.MANAGER, Role.EMPLOYEE])

@@ -11,10 +11,52 @@ import datetime
 
 from apps.audit_logs.services import AuditLogger
 from apps.employees.services import approvers_for_employee
-from apps.leave.models import LeaveBalance, LeaveRequest, LeaveRequestStatus
+from apps.leave.models import LeaveBalance, LeaveRequest, LeaveRequestStatus, LeaveType
 from apps.notifications.models import NotificationCategory
 from apps.notifications.services import NotificationDispatcher
 from core.exceptions import ApiError
+
+# Starter set every organization gets so employees have something to pick
+# from immediately — an Org Admin can rename/add/remove types afterward
+# (LeaveType is a per-org table precisely so they can); this just avoids
+# a brand-new org's leave-request screen showing zero options on day one.
+DEFAULT_LEAVE_TYPES = [
+    {"name": "Annual Leave", "default_annual_days": 21, "requires_approval": True},
+    {"name": "Sick Leave", "default_annual_days": 14, "requires_approval": True},
+    {"name": "Unpaid Leave", "default_annual_days": 0, "requires_approval": True},
+]
+
+
+def seed_default_leave_types(*, organization):
+    LeaveType.objects.bulk_create(
+        [LeaveType(organization=organization, **defaults) for defaults in DEFAULT_LEAVE_TYPES]
+    )
+
+
+def create_leave_type(*, organization, data, actor, request=None):
+    leave_type = LeaveType.objects.create(organization=organization, **data)
+    AuditLogger.record(
+        actor=actor,
+        action="leave_type.created",
+        organization=organization,
+        description=f"Created leave type {leave_type.name}.",
+        request=request,
+    )
+    return leave_type
+
+
+def update_leave_type(*, leave_type, data, actor, request=None):
+    for field, value in data.items():
+        setattr(leave_type, field, value)
+    leave_type.save(update_fields=[*data.keys()])
+    AuditLogger.record(
+        actor=actor,
+        action="leave_type.updated",
+        organization=leave_type.organization,
+        description=f"Updated fields: {', '.join(data.keys())}.",
+        request=request,
+    )
+    return leave_type
 
 
 class InvalidDateRangeError(ApiError):

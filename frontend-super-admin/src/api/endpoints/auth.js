@@ -18,3 +18,23 @@ export function changePassword({ currentPassword, newPassword }) {
     })
     .then((res) => res.data);
 }
+
+export function requestProfilePictureUpload({ contentType, fileSize }) {
+  return apiClient
+    .post("/auth/me/profile-picture", { content_type: contentType, file_size: fileSize })
+    .then((res) => res.data);
+}
+
+// Supabase's signed-upload-URL flow: PUT the raw file directly to the URL
+// the backend just issued — bypasses `apiClient` since the signed URL
+// itself is the credential, not the session JWT.
+export async function uploadToSignedUrl({ uploadUrl, file, contentType }) {
+  const response = await fetch(uploadUrl, {
+    method: "PUT",
+    headers: { "Content-Type": contentType },
+    body: file,
+  });
+  if (!response.ok) {
+    throw new Error("Unable to upload the image. Please try again.");
+  }
+}

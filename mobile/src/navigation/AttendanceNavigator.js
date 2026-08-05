@@ -6,9 +6,9 @@ const Stack = createNativeStackNavigator();
 
 export default function AttendanceNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="CheckIn" component={CheckInScreen} options={{ title: "Attendance" }} />
-      <Stack.Screen name="History" component={HistoryScreen} options={{ title: "History" }} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="CheckIn" component={CheckInScreen} />
+      <Stack.Screen name="History" component={HistoryScreen} />
     </Stack.Navigator>
   );
 }

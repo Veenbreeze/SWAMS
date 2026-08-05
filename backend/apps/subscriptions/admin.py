@@ -5,7 +5,15 @@ from apps.subscriptions.models import Subscription, SubscriptionPlan
 
 @admin.register(SubscriptionPlan)
 class SubscriptionPlanAdmin(admin.ModelAdmin):
-    list_display = ("code", "name", "monthly_price", "max_employees", "max_branches", "is_active")
+    list_display = (
+        "code",
+        "name",
+        "monthly_price",
+        "max_employees",
+        "max_branches",
+        "grace_period_days",
+        "is_active",
+    )
     search_fields = ("code", "name")
 
 

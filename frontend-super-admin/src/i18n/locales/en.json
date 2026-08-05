@@ -1,0 +1,235 @@
+{
+  "common": {
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "loading": "Loading…",
+    "genericError": "Something went wrong. Please try again.",
+    "logOut": "Log out",
+    "close": "Close"
+  },
+  "profileDialog": {
+    "title": "Your profile",
+    "changePicture": "Change picture",
+    "uploading": "Uploading…",
+    "pictureError": "Unable to upload this picture. Please try again.",
+    "passwordSectionTitle": "Change password",
+    "currentPasswordLabel": "Current password",
+    "newPasswordLabel": "New password",
+    "changePassword": "Change password",
+    "changingPassword": "Changing…",
+    "passwordSuccess": "Password changed.",
+    "passwordError": "Unable to change your password. Check your current password and try again."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "organizations": "Organizations",
+    "subscriptionPlans": "Subscription Plans",
+    "expiryMonitor": "Expiry Monitor",
+    "auditLogs": "Audit Logs",
+    "securityEvents": "Security Events",
+    "platformSettings": "Platform Settings"
+  },
+  "pageStub": {
+    "comingSoon": "This page will be implemented in a later development phase."
+  },
+  "login": {
+    "title": "SWAMS Platform Admin",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "genericError": "Unable to sign in. Check your credentials and try again."
+  },
+  "forceChangePassword": {
+    "title": "Change your password to continue",
+    "subtitle": "Your account has a temporary password. Set a new one to continue.",
+    "currentPassword": "Current (temporary) password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "submit": "Change password",
+    "validationError": "Please fill in both password fields.",
+    "mismatchError": "New password and confirmation do not match.",
+    "genericError": "Unable to change your password. Check your current password and try again."
+  },
+  "dashboard": {
+    "title": "Platform Dashboard",
+    "loading": "Loading platform dashboard…",
+    "error": "Unable to load the platform dashboard.",
+    "totalOrganizations": "Total Organizations",
+    "active": "Active",
+    "trial": "Trial",
+    "suspended": "Suspended",
+    "expiredSubscriptions": "Expired Subscriptions",
+    "totalUsers": "Total Users",
+    "new30Days": "New (30 days)",
+    "organizationGrowth30Days": "Organization growth (30 days)",
+    "subscriptionStatus": "Subscription status",
+    "systemActivity7Days": "System activity (7 days)"
+  },
+  "subscriptionStatusLabel": {
+    "ACTIVE": "Active",
+    "TRIAL": "Trial",
+    "EXPIRED": "Expired",
+    "CANCELLED": "Cancelled",
+    "NONE": "No subscription"
+  },
+  "subscriptions": {
+    "plansTitle": "Subscription Plans",
+    "newPlan": "New plan",
+    "loadingPlans": "Loading plans…",
+    "errorPlans": "Unable to load plans.",
+    "noPlans": "No subscription plans yet.",
+    "planTable": {
+      "code": "Code",
+      "name": "Name",
+      "monthlyPrice": "Monthly price",
+      "maxEmployees": "Max employees",
+      "maxBranches": "Max branches",
+      "gracePeriod": "Grace period",
+      "gracePeriodDays": "{{count}} day(s)",
+      "active": "Active",
+      "actions": "Actions",
+      "statusActive": "Active",
+      "statusInactive": "Inactive"
+    },
+    "subscriptionsHeading": "Subscriptions",
+    "assignSubscription": "Assign subscription",
+    "loadingSubscriptions": "Loading subscriptions…",
+    "errorSubscriptions": "Unable to load subscriptions.",
+    "noSubscriptions": "No subscriptions assigned yet.",
+    "subscriptionTable": {
+      "organization": "Organization",
+      "plan": "Plan",
+      "status": "Status",
+      "start": "Start",
+      "expiry": "Expiry",
+      "actions": "Actions"
+    },
+    "cancel": "Cancel",
+    "planDialog": {
+      "editTitle": "Edit plan",
+      "newTitle": "New plan",
+      "editingDescription": "Editing {{code}}",
+      "createDescription": "Create a new subscription plan.",
+      "codeLabel": "Code",
+      "nameLabel": "Name",
+      "monthlyPriceLabel": "Monthly price",
+      "maxEmployeesLabel": "Max employees",
+      "maxBranchesLabel": "Max branches",
+      "gracePeriodLabel": "Grace period (days)",
+      "activeLabel": "Active",
+      "genericError": "Unable to save this plan."
+    },
+    "assignDialog": {
+      "title": "Assign subscription",
+      "description": "Start a new subscription term for an organization.",
+      "organizationLabel": "Organization",
+      "organizationPlaceholder": "Select an organization…",
+      "planLabel": "Plan",
+      "planPlaceholder": "Select a plan…",
+      "startDateLabel": "Start date",
+      "expiryDateLabel": "Expiry date",
+      "assign": "Assign",
+      "assigning": "Assigning…",
+      "genericError": "Unable to assign this subscription."
+    }
+  },
+  "expiryMonitor": {
+    "title": "Expiry Monitor",
+    "description": "Current subscription terms already expired or expiring within 30 days.",
+    "loading": "Loading…",
+    "error": "Unable to load the expiry monitor.",
+    "noResults": "Nothing expiring in the next 30 days.",
+    "table": {
+      "organization": "Organization",
+      "plan": "Plan",
+      "status": "Status",
+      "expiryDate": "Expiry date",
+      "urgency": "Urgency"
+    },
+    "expired": "Expired",
+    "daysLeft": "{{count}} day(s) left"
+  },
+  "organizations": {
+    "new": "New organization",
+    "loading": "Loading organizations…",
+    "error": "Unable to load organizations.",
+    "noResults": "No organizations yet.",
+    "table": {
+      "code": "Code",
+      "name": "Name",
+      "email": "Email",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "suspend": "Suspend",
+    "activate": "Activate",
+    "confirmSuspendTitle": "Suspend organization?",
+    "confirmSuspend": "Suspend \"{{name}}\"? Its users will be unable to sign in until reactivated.",
+    "editTitle": "Edit organization",
+    "newTitle": "New organization",
+    "editDescription": "Update this organization's contact details.",
+    "newDescription": "Creates the organization and bootstraps its first Org Admin.",
+    "registrationNumberLabel": "Registration number",
+    "phoneLabel": "Phone",
+    "addressLabel": "Address",
+    "logoUrlLabel": "Logo URL",
+    "adminEmailLabel": "Org Admin email",
+    "adminPasswordLabel": "Org Admin password",
+    "adminPasswordHint": "The Org Admin will be required to change this the first time they sign in.",
+    "saveError": "Unable to save this organization."
+  },
+  "auditLogs": {
+    "loading": "Loading audit logs…",
+    "error": "Unable to load audit logs.",
+    "noResults": "No audit log entries yet.",
+    "filters": {
+      "allOrganizations": "All organizations",
+      "action": "Action",
+      "actionPlaceholder": "e.g. organization.suspended"
+    },
+    "table": {
+      "timestamp": "Timestamp",
+      "user": "User",
+      "action": "Action",
+      "description": "Description",
+      "ipAddress": "IP address"
+    }
+  },
+  "securityEvents": {
+    "loading": "Loading security events…",
+    "error": "Unable to load security events.",
+    "noResults": "No security events yet.",
+    "filters": {
+      "allOrganizations": "All organizations",
+      "eventType": "Event type",
+      "allEventTypes": "All event types"
+    },
+    "table": {
+      "timestamp": "Timestamp",
+      "user": "User",
+      "eventType": "Event type",
+      "description": "Description",
+      "ipAddress": "IP address"
+    }
+  },
+  "securityEventType": {
+    "MOCK_LOCATION_DETECTED": "Mock location detected",
+    "IMPLAUSIBLE_TRAVEL_SPEED": "Implausible travel speed",
+    "CROSS_TENANT_ACCESS_ATTEMPT": "Cross-tenant access attempt",
+    "ACCOUNT_LOCKED": "Account locked",
+    "NEW_DEVICE_LOGIN": "New device login"
+  },
+  "platformSettings": {
+    "loading": "Loading platform settings…",
+    "error": "Unable to load platform settings.",
+    "saveError": "Unable to save platform settings.",
+    "saved": "Saved.",
+    "maintenanceModeLabel": "Maintenance mode",
+    "maintenanceModeHint": "Marks the platform as under maintenance. Does not yet block sign-in on its own.",
+    "defaultTrialDaysLabel": "Default trial length (days)",
+    "supportEmailLabel": "Support contact email"
+  }
+}

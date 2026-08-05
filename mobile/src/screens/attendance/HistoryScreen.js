@@ -1,14 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { getHistory } from "@/services/api/endpoints/attendance";
-
-const STATUS_LABELS = {
-  PRESENT: "Present",
-  LATE: "Late",
-  EARLY_DEPARTURE: "Early Departure",
-  OVERTIME: "Overtime",
-  ABSENT: "Absent",
-};
+import { useI18n } from "@/i18n";
+import { colors, statusColors } from "@/theme/colors";
 
 function formatDate(isoDate) {
   return new Date(isoDate).toLocaleDateString([], {
@@ -19,6 +14,7 @@ function formatDate(isoDate) {
 }
 
 export default function HistoryScreen() {
+  const { t } = useI18n();
   const [records, setRecords] = useState([]);
   const [nextUrl, setNextUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,11 +29,11 @@ export default function HistoryScreen() {
       setRecords(data.results);
       setNextUrl(data.next);
     } catch (err) {
-      setError(err.message || "Unable to load attendance history.");
+      setError(err.message || t("history.genericError"));
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     loadFirstPage();
@@ -60,49 +56,77 @@ export default function HistoryScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
+      <SafeAreaView style={styles.centered} edges={["top"]}>
         <ActivityIndicator />
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
+      <SafeAreaView style={styles.centered} edges={["top"]}>
         <Text style={styles.error}>{error}</Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <FlatList
-      style={styles.container}
-      data={records}
-      keyExtractor={(item) => item.id}
-      onEndReached={loadNextPage}
-      onEndReachedThreshold={0.4}
-      ListEmptyComponent={
-        <View style={styles.centered}>
-          <Text style={styles.meta}>No attendance history yet.</Text>
-        </View>
-      }
-      ListFooterComponent={isLoadingMore ? <ActivityIndicator style={styles.footer} /> : null}
-      renderItem={({ item }) => (
-        <View style={styles.row}>
-          <View>
-            <Text style={styles.date}>{formatDate(item.attendance_date)}</Text>
-            {item.branch && <Text style={styles.meta}>{item.branch.name}</Text>}
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <FlatList
+        style={styles.container}
+        data={records}
+        keyExtractor={(item) => item.id}
+        onEndReached={loadNextPage}
+        onEndReachedThreshold={0.4}
+        ListHeaderComponent={
+          <Text style={styles.title}>{t("nav.history")}</Text>
+        }
+        ListEmptyComponent={
+          <View style={styles.centered}>
+            <Text style={styles.meta}>{t("history.noResults")}</Text>
           </View>
-          <Text style={styles.status}>{STATUS_LABELS[item.status] || item.status}</Text>
-        </View>
-      )}
-    />
+        }
+        ListFooterComponent={isLoadingMore ? <ActivityIndicator style={styles.footer} /> : null}
+        renderItem={({ item }) => (
+          <View style={styles.row}>
+            <View>
+              <Text style={styles.date}>{formatDate(item.attendance_date)}</Text>
+              {item.branch && <Text style={styles.meta}>{item.branch.name}</Text>}
+            </View>
+            <View
+              style={[
+                styles.statusPill,
+                { backgroundColor: `${statusColors[item.status] ?? colors.textMuted}1a` },
+              ]}
+            >
+              <Text style={[styles.status, { color: statusColors[item.status] ?? colors.textMuted }]}>
+                {t(`attendanceStatus.${item.status}`, { defaultValue: item.status })}
+              </Text>
+            </View>
+          </View>
+        )}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
-  centered: { flex: 1, justifyContent: "center", alignItems: "center", padding: 24 },
+  safeArea: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1, backgroundColor: colors.background },
+  title: {
+    fontSize: 24,
+    fontWeight: "600",
+    marginBottom: 24,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
+    backgroundColor: colors.background,
+  },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -113,7 +137,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#f3f4f6",
   },
   date: { fontSize: 16, fontWeight: "600", color: "#111827" },
-  meta: { marginTop: 2, color: "#6b7280" },
+  meta: { marginTop: 8, color: "#6b7280" },
+  statusPill: { borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
   status: { fontWeight: "600", color: "#374151" },
   error: { color: "#dc2626" },
   footer: { marginVertical: 16 },

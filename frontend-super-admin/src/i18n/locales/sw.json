@@ -1,0 +1,235 @@
+{
+  "common": {
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "cancel": "Ghairi",
+    "edit": "Hariri",
+    "loading": "Inapakia…",
+    "genericError": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "logOut": "Toka",
+    "close": "Funga"
+  },
+  "profileDialog": {
+    "title": "Wasifu wako",
+    "changePicture": "Badilisha picha",
+    "uploading": "Inapakia…",
+    "pictureError": "Imeshindwa kupakia picha hii. Tafadhali jaribu tena.",
+    "passwordSectionTitle": "Badilisha nenosiri",
+    "currentPasswordLabel": "Nenosiri la sasa",
+    "newPasswordLabel": "Nenosiri jipya",
+    "changePassword": "Badilisha nenosiri",
+    "changingPassword": "Inabadilisha…",
+    "passwordSuccess": "Nenosiri limebadilishwa.",
+    "passwordError": "Imeshindwa kubadilisha nenosiri lako. Angalia nenosiri lako la sasa na ujaribu tena."
+  },
+  "nav": {
+    "dashboard": "Dashibodi",
+    "organizations": "Mashirika",
+    "subscriptionPlans": "Mipango ya Usajili",
+    "expiryMonitor": "Ufuatiliaji wa Muda wa Kuisha",
+    "auditLogs": "Kumbukumbu za Ukaguzi",
+    "securityEvents": "Matukio ya Usalama",
+    "platformSettings": "Mipangilio ya Jukwaa"
+  },
+  "pageStub": {
+    "comingSoon": "Ukurasa huu utatengenezwa katika awamu ijayo ya maendeleo."
+  },
+  "login": {
+    "title": "Msimamizi wa Jukwaa la SWAMS",
+    "email": "Barua pepe",
+    "password": "Nenosiri",
+    "submit": "Ingia",
+    "submitting": "Inaingia…",
+    "genericError": "Imeshindwa kuingia. Angalia taarifa zako na ujaribu tena."
+  },
+  "forceChangePassword": {
+    "title": "Badilisha nenosiri lako ili kuendelea",
+    "subtitle": "Akaunti yako ina nenosiri la muda. Weka jipya ili kuendelea.",
+    "currentPassword": "Nenosiri la sasa (la muda)",
+    "newPassword": "Nenosiri jipya",
+    "confirmPassword": "Thibitisha nenosiri jipya",
+    "submit": "Badilisha nenosiri",
+    "validationError": "Tafadhali jaza sehemu zote mbili za nenosiri.",
+    "mismatchError": "Nenosiri jipya na uthibitisho havifanani.",
+    "genericError": "Imeshindwa kubadilisha nenosiri lako. Angalia nenosiri lako la sasa na ujaribu tena."
+  },
+  "dashboard": {
+    "title": "Dashibodi ya Jukwaa",
+    "loading": "Inapakia dashibodi ya jukwaa…",
+    "error": "Imeshindwa kupakia dashibodi ya jukwaa.",
+    "totalOrganizations": "Jumla ya Mashirika",
+    "active": "Yanayotumika",
+    "trial": "Ya Majaribio",
+    "suspended": "Yaliyosimamishwa",
+    "expiredSubscriptions": "Usajili Uliomalizika Muda",
+    "totalUsers": "Jumla ya Watumiaji",
+    "new30Days": "Mapya (siku 30)",
+    "organizationGrowth30Days": "Ukuaji wa mashirika (siku 30)",
+    "subscriptionStatus": "Hali ya usajili",
+    "systemActivity7Days": "Shughuli za mfumo (siku 7)"
+  },
+  "subscriptionStatusLabel": {
+    "ACTIVE": "Inatumika",
+    "TRIAL": "Ya Majaribio",
+    "EXPIRED": "Imeisha Muda",
+    "CANCELLED": "Imeghairiwa",
+    "NONE": "Hakuna usajili"
+  },
+  "subscriptions": {
+    "plansTitle": "Mipango ya Usajili",
+    "newPlan": "Mpango mpya",
+    "loadingPlans": "Inapakia mipango…",
+    "errorPlans": "Imeshindwa kupakia mipango.",
+    "noPlans": "Hakuna mipango ya usajili bado.",
+    "planTable": {
+      "code": "Msimbo",
+      "name": "Jina",
+      "monthlyPrice": "Bei ya kila mwezi",
+      "maxEmployees": "Wafanyakazi wa juu",
+      "maxBranches": "Matawi ya juu",
+      "gracePeriod": "Muda wa neema",
+      "gracePeriodDays": "Siku {{count}}",
+      "active": "Inatumika",
+      "actions": "Vitendo",
+      "statusActive": "Inatumika",
+      "statusInactive": "Haitumiki"
+    },
+    "subscriptionsHeading": "Usajili",
+    "assignSubscription": "Panga usajili",
+    "loadingSubscriptions": "Inapakia usajili…",
+    "errorSubscriptions": "Imeshindwa kupakia usajili.",
+    "noSubscriptions": "Hakuna usajili uliopangwa bado.",
+    "subscriptionTable": {
+      "organization": "Shirika",
+      "plan": "Mpango",
+      "status": "Hali",
+      "start": "Mwanzo",
+      "expiry": "Mwisho",
+      "actions": "Vitendo"
+    },
+    "cancel": "Ghairi",
+    "planDialog": {
+      "editTitle": "Hariri mpango",
+      "newTitle": "Mpango mpya",
+      "editingDescription": "Unahariri {{code}}",
+      "createDescription": "Unda mpango mpya wa usajili.",
+      "codeLabel": "Msimbo",
+      "nameLabel": "Jina",
+      "monthlyPriceLabel": "Bei ya kila mwezi",
+      "maxEmployeesLabel": "Wafanyakazi wa juu",
+      "maxBranchesLabel": "Matawi ya juu",
+      "gracePeriodLabel": "Muda wa neema (siku)",
+      "activeLabel": "Inatumika",
+      "genericError": "Imeshindwa kuhifadhi mpango huu."
+    },
+    "assignDialog": {
+      "title": "Panga usajili",
+      "description": "Anzisha muda mpya wa usajili kwa shirika.",
+      "organizationLabel": "Shirika",
+      "organizationPlaceholder": "Chagua shirika…",
+      "planLabel": "Mpango",
+      "planPlaceholder": "Chagua mpango…",
+      "startDateLabel": "Tarehe ya kuanza",
+      "expiryDateLabel": "Tarehe ya kuisha",
+      "assign": "Panga",
+      "assigning": "Inapanga…",
+      "genericError": "Imeshindwa kupanga usajili huu."
+    }
+  },
+  "expiryMonitor": {
+    "title": "Ufuatiliaji wa Muda wa Kuisha",
+    "description": "Usajili wa sasa ulioisha muda au unaoisha ndani ya siku 30.",
+    "loading": "Inapakia…",
+    "error": "Imeshindwa kupakia ufuatiliaji wa muda wa kuisha.",
+    "noResults": "Hakuna kinachokaribia kuisha katika siku 30 zijazo.",
+    "table": {
+      "organization": "Shirika",
+      "plan": "Mpango",
+      "status": "Hali",
+      "expiryDate": "Tarehe ya kuisha",
+      "urgency": "Uzito"
+    },
+    "expired": "Imeisha Muda",
+    "daysLeft": "Siku {{count}} zimebaki"
+  },
+  "organizations": {
+    "new": "Shirika jipya",
+    "loading": "Inapakia mashirika…",
+    "error": "Imeshindwa kupakia mashirika.",
+    "noResults": "Hakuna mashirika bado.",
+    "table": {
+      "code": "Msimbo",
+      "name": "Jina",
+      "email": "Barua pepe",
+      "status": "Hali",
+      "actions": "Vitendo"
+    },
+    "suspend": "Simamisha",
+    "activate": "Amilisha",
+    "confirmSuspendTitle": "Simamisha shirika?",
+    "confirmSuspend": "Simamisha \"{{name}}\"? Watumiaji wake hawataweza kuingia hadi litakapoamilishwa tena.",
+    "editTitle": "Hariri shirika",
+    "newTitle": "Shirika jipya",
+    "editDescription": "Sasisha taarifa za mawasiliano za shirika hili.",
+    "newDescription": "Inaunda shirika na kuanzisha Msimamizi wake wa kwanza wa Shirika.",
+    "registrationNumberLabel": "Namba ya usajili",
+    "phoneLabel": "Simu",
+    "addressLabel": "Anwani",
+    "logoUrlLabel": "URL ya nembo",
+    "adminEmailLabel": "Barua pepe ya Msimamizi wa Shirika",
+    "adminPasswordLabel": "Nenosiri la Msimamizi wa Shirika",
+    "adminPasswordHint": "Msimamizi wa Shirika atatakiwa kubadilisha hili mara ya kwanza atakapoingia.",
+    "saveError": "Imeshindwa kuhifadhi shirika hili."
+  },
+  "auditLogs": {
+    "loading": "Inapakia kumbukumbu za ukaguzi…",
+    "error": "Imeshindwa kupakia kumbukumbu za ukaguzi.",
+    "noResults": "Hakuna kumbukumbu za ukaguzi bado.",
+    "filters": {
+      "allOrganizations": "Mashirika yote",
+      "action": "Kitendo",
+      "actionPlaceholder": "mfano: organization.suspended"
+    },
+    "table": {
+      "timestamp": "Wakati",
+      "user": "Mtumiaji",
+      "action": "Kitendo",
+      "description": "Maelezo",
+      "ipAddress": "Anwani ya IP"
+    }
+  },
+  "securityEvents": {
+    "loading": "Inapakia matukio ya usalama…",
+    "error": "Imeshindwa kupakia matukio ya usalama.",
+    "noResults": "Hakuna matukio ya usalama bado.",
+    "filters": {
+      "allOrganizations": "Mashirika yote",
+      "eventType": "Aina ya tukio",
+      "allEventTypes": "Aina zote za matukio"
+    },
+    "table": {
+      "timestamp": "Wakati",
+      "user": "Mtumiaji",
+      "eventType": "Aina ya tukio",
+      "description": "Maelezo",
+      "ipAddress": "Anwani ya IP"
+    }
+  },
+  "securityEventType": {
+    "MOCK_LOCATION_DETECTED": "Mahali pa uongo pametambuliwa",
+    "IMPLAUSIBLE_TRAVEL_SPEED": "Kasi ya safari isiyowezekana",
+    "CROSS_TENANT_ACCESS_ATTEMPT": "Jaribio la ufikiaji wa shirika lingine",
+    "ACCOUNT_LOCKED": "Akaunti imefungwa",
+    "NEW_DEVICE_LOGIN": "Kuingia kwa kifaa kipya"
+  },
+  "platformSettings": {
+    "loading": "Inapakia mipangilio ya jukwaa…",
+    "error": "Imeshindwa kupakia mipangilio ya jukwaa.",
+    "saveError": "Imeshindwa kuhifadhi mipangilio ya jukwaa.",
+    "saved": "Imehifadhiwa.",
+    "maintenanceModeLabel": "Hali ya matengenezo",
+    "maintenanceModeHint": "Huweka alama kuwa jukwaa liko katika matengenezo. Bado haizuii kuingia peke yake.",
+    "defaultTrialDaysLabel": "Muda wa kawaida wa majaribio (siku)",
+    "supportEmailLabel": "Barua pepe ya msaada"
+  }
+}
