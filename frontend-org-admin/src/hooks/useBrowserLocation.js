@@ -44,8 +44,15 @@ export function useBrowserLocation() {
         (position) => {
           setIsLocating(false);
           resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            // The browser's raw float64 coords carry far more than 6
+            // decimal places (e.g. -6.79235412345678) — the backend's
+            // DecimalField(max_digits=9, decimal_places=6) rejects that
+            // outright rather than rounding it, surfacing as "no more
+            // than 6 digits". Round here to match: 6 decimal places is
+            // already ~11cm of precision at the equator, far finer than
+            // GPS hardware itself resolves.
+            latitude: Number(position.coords.latitude.toFixed(6)),
+            longitude: Number(position.coords.longitude.toFixed(6)),
             gps_accuracy: position.coords.accuracy,
           });
         },
